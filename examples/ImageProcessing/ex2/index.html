@@ -1,0 +1,1004 @@
+<html>
+
+<head>
+<title>Run Length Encoding and Region Labeling </title>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<script type="text/javascript">
+    var ctx;
+    var img;
+    var img2;
+    var altImg;
+
+    function initGL(canvas) 
+    {
+        try 
+        {
+            ctx = canvas.getContext("2d");
+            ctx.viewportWidth = canvas.width;
+            ctx.viewportHeight = canvas.height;
+            ctx.clearRect (0 , 0 , canvas.width, canvas.height);
+        } catch (e) { }
+        if (!ctx) 
+        {
+            alert("Could not initialise canvas, sorry :-(\n\
+                Maybe try Chome or Firefox?");
+        }
+    };
+
+
+    function drawScene(img) 
+    {
+        ctx.drawImage(img,0,0,img.width,img.height);
+    };
+
+
+    function drawBorder4conn(img, imgd) 
+    {
+        var zerocanx = Math.floor(ctx.viewportWidth / 2);
+        var zerocany = Math.floor(ctx.viewportHeight / 2);
+
+        altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+        var altpix = altImg.data;
+
+        var pix = imgd.data;
+        var rowSize = ctx.viewportWidth;
+        var colSize = ctx.viewportHeight;
+        var currow, curcol, state;
+        var firstrow = 0, firstcol = 0;
+        var breakflag = 0;
+
+        //find first pixel
+        for (var row = 0; row < img.height; row++) 
+        {
+            for (var col = 0; col < img.width; col++) 
+            {
+                if(pix[4*(row*img.width+col)] > 1)
+                {
+                    firstrow = row;
+                    firstcol = col;
+                    breakflag = 1;
+                    // console.log("found first pixel");
+                };
+                if (breakflag) {break};
+            };
+            if (breakflag) {break};
+        };
+
+
+        h = [[0,1],[-1,0],[0,-1],[1,0]];
+        state = 3;
+        currow = firstrow;
+        curcol = firstcol;
+        var t = 2;
+        // console.log("Hello World 4 connected");
+        var counter = 0;
+
+        while(true)
+        {
+            for (var i = 0; i < 4; i++) 
+            {
+                //Need to check for out of bounds
+                t = (state + i + 3) % 4;
+                if (pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 1] > 1) 
+                {
+                    //console.log("pixel is on");
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1]))] = 0;
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 1] = 255;
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 2] = 0;
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 3] = 255;
+                    state = t;
+                    currow += h[t][0];
+                    curcol += h[t][1];
+                    break;
+                };
+            };
+            //counter++;
+            if (currow == firstrow && curcol == firstcol) 
+            {
+                // console.log("I end");
+                break;
+            };
+            // if (counter > 1000) 
+            // {
+            //     console.log("I went around forever");
+            //     break;
+            // };
+        };
+
+
+        //Copy pix data to canvas
+        for (var row = 0; row < img.height; row++) {
+            for (var col = 0; col < img.width; col++) {
+                altpix[4*(row*rowSize + col) ] = pix[4*(row * img.width + col)];
+                altpix[4*(row*rowSize + col)+1 ] =  pix[4*(row * img.width + col) + 1];
+
+                altpix[4*(row*rowSize + col)+2 ] =  pix[4*(row * img.width + col) + 2];
+
+                altpix[4*(row*rowSize + col)+3 ] =  pix[4*(row * img.width + col) + 3];
+            };
+        };
+
+
+        // for (var row = 0; row < rowSize; row++) {
+        //     for (var col = 0; col < colSize; col++) {
+
+
+        //         //Nearest neighbor interpolation
+        //         imgY = Math.round(imgY);
+        //         imgX = Math.round(imgX);
+
+        //         //console.log(zeroX, (zeroX - imgX),zeroY,(zeroY - imgY));
+
+
+        //         // if( (zeroY - imgY) >= 0 && (zeroY - imgY) <= img.height && (zeroX - imgX) >= 0 && (zeroX -imgX) <= img.width) {
+                    
+                    
+        //             // altpix[4*(row*rowSize + col) ] = pix[4*((zeroY - imgY) * img.height + (imgX - zeroX))];
+        //             // altpix[4*(row*rowSize + col)+1 ] =  pix[4*((zeroY - imgY) * img.height + (imgX - zeroX)) + 1];
+
+        //             // altpix[4*(row*rowSize + col)+2 ] =  pix[4*((zeroY - imgY) * img.height + (imgX - zeroX)) + 2];
+
+        //             // altpix[4*(row*rowSize + col)+3 ] =  pix[4*((zeroY - imgY) * img.height + (imgX - zeroX)) + 3];
+
+        //         // };
+
+        //     };
+
+        // };
+        
+        ctx.putImageData(altImg,0,0);
+        // console.log(img);
+        // console.log(zerocanx, ctx.viewportWidth, ctx.viewportWidth / 2, Math.floor(ctx.viewportWidth/2));
+        // ctx.fillStyle = "rgba(200, 0, 0, 0.5)";
+        // ctx.fillRect(0, 0, 500, 500);
+    };
+
+
+    function drawBorder8conn(img, imgd) 
+    {
+        var zerocanx = Math.floor(ctx.viewportWidth / 2);
+        var zerocany = Math.floor(ctx.viewportHeight / 2);
+
+        altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+        var altpix = altImg.data;
+
+        var pix = imgd.data;
+        var rowSize = ctx.viewportWidth;
+        var colSize = ctx.viewportHeight;
+        var currow, curcol, state;
+        var firstrow = 0, firstcol = 0;
+        var breakflag = 0;
+
+        //find first pixel
+        for (var row = 0; row < img.height; row++) 
+        {
+            for (var col = 0; col < img.width; col++) 
+            {
+                if(pix[4*(row*img.width+col) +1] > 1)
+                {
+                    firstrow = row;
+                    firstcol = col;
+                    breakflag = 1;
+                };
+                if (breakflag) {break};
+            };
+            if (breakflag) {break};
+        };
+
+
+        h = [[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],[1,0],[1,1]];
+        state = 6;
+        currow = firstrow;
+        curcol = firstcol;
+        var t = 2;
+        var counter = 0;
+
+        while(true)
+        {
+            for (var i = 0; i < 8; i++) 
+            {
+                //Need to check for out of bounds
+                t = (state + i + 6) % 8;
+                if (pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 1] > 1) 
+                {
+                    //console.log("pixel is on");
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1]))] = 255;
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 1] = 0;
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 2] = 255;
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 3] = 255;
+                    state = t;
+                    currow += h[t][0];
+                    curcol += h[t][1];
+                    break;
+                };
+            };
+            counter++;
+            if (currow == firstrow && curcol == firstcol) 
+            {
+                // console.log("I end2");
+                break;
+            };
+            // if (counter > 1000) 
+            // {
+            //     console.log("I went around forever2");
+            //     break;
+            // };
+        };
+
+
+        //Copy pix data to canvas
+        for (var row = 0; row < img.height; row++) {
+            for (var col = 0; col < img.width; col++) {
+                altpix[4*(row*rowSize + col) ] = pix[4*(row * img.width + col)];
+                altpix[4*(row*rowSize + col)+1 ] =  pix[4*(row * img.width + col) + 1];
+
+                altpix[4*(row*rowSize + col)+2 ] =  pix[4*(row * img.width + col) + 2];
+
+                altpix[4*(row*rowSize + col)+3 ] =  pix[4*(row * img.width + col) + 3];
+            };
+        };
+        
+        ctx.putImageData(altImg,0,0);
+
+    };
+
+    function findRegions(img, imgd) 
+    {
+        var zerocanx = Math.floor(ctx.viewportWidth / 2);
+        var zerocany = Math.floor(ctx.viewportHeight / 2);
+
+        altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+        var altpix = altImg.data;
+
+        var pix = imgd.data;
+        var rowSize = ctx.viewportWidth;
+        var colSize = ctx.viewportHeight;
+        var curregion = 0, tempregion = 0;
+        var h = [[-1,1],[-1,0],[-1,-1],[0,-1]];
+        var regionMap = [];
+        var regions = [];
+        var prevreg = [undefined,undefined,undefined,undefined], tempregion = [];
+        var updateFlag = true;
+        var j, currloc;
+
+        //regionMap[0] = 0;
+        console.log(regionMap.length, null, (null == 0),(regionMap[1] == undefined), regionMap[2]);
+        //find regions
+        for (var row = 0; row < img.height; row++) 
+        {
+            for (var col = 0; col < img.width; col++) 
+            {
+                if(pix[4*((row)*img.width+(col))] > 1)
+                {
+                    curregion = regionMap.length;
+                    // console.log(curregion);
+                    for (var i = 0; i < h.length; i++) 
+                    {
+                        //check if surrounding pixels belong to
+                        //an already labeled region
+                        if (row+h[i][0] >= 0 ||  col+h[i][1] >= 0 || row+h[i][0] < img.width || col+h[i][1] < img.height) 
+                        {
+                            //console.log(regions[4*((row+h[i][0])*img.width+(col+h[i][1]))]);
+                            if (regions[4*((row+h[i][0])*img.width+(col+h[i][1]))] != undefined) 
+                            {
+                                updateFlag = false;
+                                prevreg[i] = regions[4*((row+h[i][0])*img.width+(col+h[i][1]))];
+                                //console.log(prevreg,curregion);
+ 
+                            };
+
+
+                        };
+
+                    };
+                    if (updateFlag) 
+                    {
+                        regionMap[curregion] = curregion;
+                        regions[4*((row)*img.width+(col))] = curregion;                    
+                    } else {
+                        for (var i = 0; i < prevreg.length; i++)
+                        {
+                            if (prevreg[i] != undefined) {
+                                tempregion[tempregion.length] = prevreg[i];
+                            };
+                        };
+                        for (var i = 0; i < tempregion.length - 1; i++) 
+                        {
+                            j = i + 1;
+                            if (tempregion[i] == tempregion[j]) 
+                            {
+                                //do nothing
+                            } else if (tempregion[i] > tempregion[j]) 
+                            {
+                                regionMap[tempregion[i]] = tempregion[j];
+                            } else {
+                                regionMap[tempregion[j]] = tempregion[i];
+                            };
+                        };
+                        regions[4*((row)*img.width+(col))] = tempregion[0];
+                    };
+
+                    updateFlag = true;
+                    prevreg = [undefined,undefined,undefined,undefined]; 
+                    tempregion = [];
+                };
+            };
+        };
+
+        console.log("for loop done",regionMap.length,curregion,regionMap[11]);
+        // console.log(curregion);
+        for (var i = 0; i < regionMap.length; i++) {
+            console.log(i,regionMap[i]);
+        };
+
+        var colors = [[255,0,0],[0,255,0],[0,0,255],[100,100,100],[0,50,50],[200,100,50],[50,200,50],[150,50,200],[100,200,100],[55,0,0],[100,255,0],[100,0,255],[255,255,255]];
+        var colormap = [];
+        colormap[0] = colors[0];
+        //Assign colors
+        for (var i = 0; i <= regionMap.length; i++) {
+            if (regionMap[i] != i) {
+                colormap[i] = colormap[regionMap[i]];
+            } else{
+                colormap[i] = colors[i];
+            };
+        };
+
+        var regionMapTemp = [];
+        curregion = 0;
+        //find regions
+        for (var row = 0; row < img.height; row++) 
+        {
+            for (var col = 0; col < img.width; col++) 
+            {
+                if(pix[4*((row)*img.width+(col))] > 1)
+                {
+                    curregion = regionMapTemp.length;
+                    // console.log(curregion);
+                    for (var i = 0; i < h.length; i++) 
+                    {
+
+                        //check if surrounding pixels belong to
+                        //an already labeled region
+                        if (row+h[i][0] >= 0 ||  col+h[i][1] >= 0 || row+h[i][0] < img.width || col+h[i][1] < img.height) 
+                        {
+                            //console.log(regions[4*((row+h[i][0])*img.width+(col+h[i][1]))]);
+                            if (regions[4*((row+h[i][0])*img.width+(col+h[i][1]))] != undefined) 
+                            {
+                                updateFlag = false;
+                                prevreg[i] = regions[4*((row+h[i][0])*img.width+(col+h[i][1]))];
+                                //console.log(prevreg,curregion);
+                            };
+                        };
+
+                    };
+                    if (updateFlag) 
+                    {
+                        regionMapTemp[curregion] = curregion;
+                        //curregion++;
+                        regions[4*((row)*img.width+(col))] = curregion;                    
+                    } else {
+                        for (var i = 0; i < prevreg.length; i++)
+                        {
+                            if (prevreg[i] != undefined) {
+                                tempregion[tempregion.length] = prevreg[i];
+                            };
+                        };
+                        for (var i = 0; i < tempregion.length - 1; i++) 
+                        {
+                            j = i + 1;
+                            if (tempregion[i] == tempregion[j]) 
+                            {
+                                //do nothing
+                            } else if (tempregion[i] > tempregion[j]) 
+                            {
+                                regionMapTemp[tempregion[i]] = tempregion[j];
+                            } else {
+                                regionMapTemp[tempregion[j]] = tempregion[i];
+                            };
+                        };
+                        regions[4*((row)*img.width+(col))] = tempregion[0];
+                    };
+
+                    updateFlag = true;
+                    prevreg = [undefined,undefined,undefined,undefined]; 
+                    tempregion = [];
+                    // console.log(colormap[0],colormap[0][0],curregion -1,colormap[regionMap[curregion-1]]);
+                    currloc = 4*((row)*img.width+(col));
+                    //console.log("curr",curregion,"rm len",regionMap.length,"rm t len",regionMapTemp.length);
+
+                    pix[4*((row)*img.width+(col)) + 0] = colormap[regionMap[regions[currloc]]][0];
+                    pix[4*((row)*img.width+(col)) + 1] = colormap[regionMap[regions[currloc]]][1];
+                    pix[4*((row)*img.width+(col)) + 2] = colormap[regionMap[regions[currloc]]][2];
+                    pix[4*((row)*img.width+(col)) + 3] = 255;
+                    //curregion += 1;
+                };
+            };
+        };
+
+        //Copy pix data to canvas
+        for (var row = 0; row < img.height; row++) {
+            for (var col = 0; col < img.width; col++) {
+                altpix[4*(row*rowSize + col) ] = pix[4*(row * img.width + col)];
+                altpix[4*(row*rowSize + col)+1 ] =  pix[4*(row * img.width + col) + 1];
+
+                altpix[4*(row*rowSize + col)+2 ] =  pix[4*(row * img.width + col) + 2];
+
+                altpix[4*(row*rowSize + col)+3 ] =  pix[4*(row * img.width + col) + 3];
+            };
+        };
+
+
+
+        ctx.putImageData(altImg,0,0);
+    };
+
+
+    function draw4cdegerateCase() {
+        altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+        var altpix = altImg.data;
+
+        var rowSize = ctx.viewportWidth;
+        var colSize = ctx.viewportHeight;
+
+        //
+        for (var row = 0; row < colSize; row++) 
+        {
+            for (var col = 0; col < rowSize; col++) 
+            {
+                if(row == Math.floor(rowSize/2) && col >= Math.floor(colSize/2) && col < colSize)
+                {
+                altpix[4*(row*rowSize + col) ] = 255;
+                altpix[4*(row*rowSize + col)+1 ] = 255;
+
+                altpix[4*(row*rowSize + col)+2 ] = 255;
+
+                altpix[4*(row*rowSize + col)+3 ] = 255;
+                };
+                if(col == Math.floor(colSize/2) && row >= Math.floor(rowSize/2) && row < rowSize)
+                {
+                altpix[4*(row*rowSize + col) ] = 255;
+                altpix[4*(row*rowSize + col)+1 ] = 255;
+
+                altpix[4*(row*rowSize + col)+2 ] = 255;
+
+                altpix[4*(row*rowSize + col)+3 ] = 255;
+                };
+            };
+        };
+        ctx.putImageData(altImg,0,0);
+    };
+
+    function conn4() {
+        var canvas0 = document.getElementById("canvas0");
+        var canvas1 = document.getElementById("canvas1");
+        ctx0 = canvas0.getContext("2d");
+        ctx = ctx0;
+        imgd = ctx.getImageData(0,0,canvas0.width,canvas0.height);
+        initGL(canvas1);
+        imgd = ctx0.getImageData(0,0,canvas0.width,canvas0.height);
+        drawBorder4conn(img, imgd);
+
+    };
+    function conn8() {
+        var canvas0 = document.getElementById("canvas0");
+        var canvas1 = document.getElementById("canvas1");
+        ctx0 = canvas0.getContext("2d");
+        ctx = ctx0;
+        imgd = ctx.getImageData(0,0,canvas0.width,canvas0.height);
+        initGL(canvas1);
+        imgd = ctx0.getImageData(0,0,canvas0.width,canvas0.height);
+        drawBorder8conn(img, imgd);
+    };
+    function Both() {
+        var canvas0 = document.getElementById("canvas0");
+        var canvas1 = document.getElementById("canvas1");
+        ctx0 = canvas0.getContext("2d");
+        ctx = ctx0;
+        initGL(canvas1);
+        ctx0 = canvas0.getContext("2d");
+        imgd = ctx0.getImageData(0,0,canvas0.width,canvas0.height);
+        drawBorder4conn(img, imgd);
+        drawBorder8conn(img, imgd);
+    };
+    function Reset() {
+        var canvas0 = document.getElementById("canvas0");
+        var canvas1 = document.getElementById("canvas1");
+        ctx0 = canvas0.getContext("2d");
+        imgd = ctx0.getImageData(0,0,canvas0.width,canvas0.height);
+        initGL(canvas1);
+        ctx.putImageData(imgd,0,0);
+        //console.log("I'm reseting");
+    };
+
+    function conn42() {
+        var canvas2 = document.getElementById("canvas2");
+        var img3 = new Image(canvas2.width,canvas2.height);
+        initGL(canvas2);
+        ctx.fillStyle = "rgb(0,0,0)";
+        ctx.fillRect(0,0,canvas2.width,canvas2.height);
+        draw4cdegerateCase();
+        imgd = ctx.getImageData(0,0,canvas2.width,canvas2.height);
+        initGL(canvas2);
+        drawBorder4conn(img3, imgd);
+
+    };
+    function Reset2() {
+        var canvas2 = document.getElementById("canvas2");
+        var img3 = new Image(canvas2.width,canvas2.height);
+        initGL(canvas2);
+        ctx.fillStyle = "rgb(0,0,0)";
+        ctx.fillRect(0,0,canvas2.width,canvas2.height);
+        draw4cdegerateCase();
+    };
+
+    function webGLStart() {
+        var canvas0 = document.getElementById("canvas0");
+        var canvas1 = document.getElementById("canvas1");
+        var canvas2 = document.getElementById("canvas2");
+        var canvas3 = document.getElementById("canvas3");
+        var canvas4 = document.getElementById("canvas4");
+        img = new Image();
+        img.src = "figure1_problem_set_3.png";
+        var imgd;
+        img.onload = function() {
+            initGL(canvas0);
+            canvas0.width = img.width;
+            canvas0.height = img.height;
+            drawScene(img);
+            imgd = ctx.getImageData(0,0,canvas0.width,canvas0.height);
+            initGL(canvas1);
+            ctx.putImageData(imgd,0,0);
+        };
+        var img3 = new Image(canvas2.width,canvas2.height);
+        initGL(canvas2);
+        ctx.fillStyle = "rgb(0,0,0)";
+        ctx.fillRect(0,0,canvas2.width,canvas2.height);
+        draw4cdegerateCase();
+
+
+        img2 = new Image();
+        img2.src = "figure2_problem_set_3.png";
+        img2.onload = function() {
+            initGL(canvas3);
+            canvas3.width = img2.width;
+            canvas3.height = img2.height;
+            drawScene(img2);
+            imgd = ctx.getImageData(0,0,img2.width,img2.height);
+            initGL(canvas4);
+            findRegions(img2,imgd);
+        };
+    };
+</script>
+
+
+</head>
+
+
+<body onload="webGLStart();">
+    <p>Image to Use: </p>
+
+    <canvas id="canvas0" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+
+    <p></p>
+
+    <button onclick="conn4()">Show 4 connectivity</button>
+    <button onclick="conn8()">Show 8 connectivity</button>
+    <button onclick="Both()">Show both 4 and 8</button>
+    <button onclick="Reset()">Back to Original</button>
+    <canvas id="canvas1" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+    <button onclick="onOff0()">Show relevant JS code</button>
+    <script type="text/javascript">
+        function onOff0() {
+        var onOff = document.getElementById("item0").style.display;
+        if (onOff == "none") {
+            document.getElementById("item0").style.display="block";
+        } else{
+            document.getElementById("item0").style.display="none";
+        };
+        };
+    </script>
+
+    <pre id="item0" style="display:none;">
+        Javascript Code:
+        <code>
+    function drawBorder4conn(img, imgd) 
+    {
+        var zerocanx = Math.floor(ctx.viewportWidth / 2);
+        var zerocany = Math.floor(ctx.viewportHeight / 2);
+
+        altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+        var altpix = altImg.data;
+
+        var pix = imgd.data;
+        var rowSize = ctx.viewportWidth;
+        var colSize = ctx.viewportHeight;
+        var currow, curcol, state;
+        var firstrow = 0, firstcol = 0;
+        var breakflag = 0;
+
+        //find first pixel
+        for (var row = 0; row &lt; img.height; row++) 
+        {
+            for (var col = 0; col &lt; img.width; col++) 
+            {
+                if(pix[4*(row*img.width+col)] > 1)
+                {
+                    firstrow = row;
+                    firstcol = col;
+                    breakflag = 1;
+                };
+                if (breakflag) {break};
+            };
+            if (breakflag) {break};
+        };
+
+
+        h = [[0,1],[-1,0],[0,-1],[1,0]];
+        state = 3;
+        currow = firstrow;
+        curcol = firstcol;
+        var t = 2;
+        // console.log("Hello World 4 connected");
+        var counter = 0;
+
+        while(true)
+        {
+            for (var i = 0; i &lt; 4; i++) 
+            {
+                //Need to check for out of bounds
+                t = (state + i + 3) % 4;
+                if (pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 1] > 1) 
+                {
+
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1]))] = 0;
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 1] = 255;
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 2] = 0;
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 3] = 255;
+                    state = t;
+                    currow += h[t][0];
+                    curcol += h[t][1];
+                    break;
+                };
+            };
+            if (currow == firstrow &amp;&amp; curcol == firstcol) 
+            {
+                // console.log("I end");
+                break;
+            };
+
+        };
+
+
+        //Copy pix data to canvas
+        for (var row = 0; row &lt; img.height; row++) {
+            for (var col = 0; col &lt; img.width; col++) {
+                altpix[4*(row*rowSize + col) ] = pix[4*(row * img.width + col)];
+                altpix[4*(row*rowSize + col)+1 ] =  pix[4*(row * img.width + col) + 1];
+
+                altpix[4*(row*rowSize + col)+2 ] =  pix[4*(row * img.width + col) + 2];
+
+                altpix[4*(row*rowSize + col)+3 ] =  pix[4*(row * img.width + col) + 3];
+            };
+        };
+
+
+        
+        ctx.putImageData(altImg,0,0);
+    };
+
+
+    function drawBorder8conn(img, imgd) 
+    {
+        var zerocanx = Math.floor(ctx.viewportWidth / 2);
+        var zerocany = Math.floor(ctx.viewportHeight / 2);
+
+        altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+        var altpix = altImg.data;
+
+        var pix = imgd.data;
+        var rowSize = ctx.viewportWidth;
+        var colSize = ctx.viewportHeight;
+        var currow, curcol, state;
+        var firstrow = 0, firstcol = 0;
+        var breakflag = 0;
+
+        //find first pixel
+        for (var row = 0; row &lt; img.height; row++) 
+        {
+            for (var col = 0; col &lt; img.width; col++) 
+            {
+                if(pix[4*(row*img.width+col) +1] > 1)
+                {
+                    firstrow = row;
+                    firstcol = col;
+                    breakflag = 1;
+                };
+                if (breakflag) {break};
+            };
+            if (breakflag) {break};
+        };
+
+
+        h = [[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],[1,0],[1,1]];
+        state = 6;
+        currow = firstrow;
+        curcol = firstcol;
+        var t = 2;
+        var counter = 0;
+
+        while(true)
+        {
+            for (var i = 0; i &lt; 8; i++) 
+            {
+                //Need to check for out of bounds
+                t = (state + i + 6) % 8;
+                if (pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 1] > 1) 
+                {
+                    //console.log("pixel is on");
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1]))] = 255;
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 1] = 0;
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 2] = 255;
+                    pix[4*((currow+h[t][0])*img.width+(curcol + h[t][1])) + 3] = 255;
+                    state = t;
+                    currow += h[t][0];
+                    curcol += h[t][1];
+                    break;
+                };
+            };
+            if (currow == firstrow &amp;&amp; curcol == firstcol) 
+            {
+                break;
+            };
+
+        };
+
+
+        //Copy pix data to canvas
+        for (var row = 0; row &lt; img.height; row++) {
+            for (var col = 0; col &lt; img.width; col++) {
+                altpix[4*(row*rowSize + col) ] = pix[4*(row * img.width + col)];
+                altpix[4*(row*rowSize + col)+1 ] =  pix[4*(row * img.width + col) + 1];
+
+                altpix[4*(row*rowSize + col)+2 ] =  pix[4*(row * img.width + col) + 2];
+
+                altpix[4*(row*rowSize + col)+3 ] =  pix[4*(row * img.width + col) + 3];
+            };
+        };
+        
+        ctx.putImageData(altImg,0,0);
+
+    };
+        </code>
+    </pre>
+
+    <p>This shows a degenerate case for the naive 4 connectivity border tracking algorithm that merely stops when it encounters the first pixel a second time. The other example for when 4 connectivity or 8 connectivity can fail is if one starts at a different first pixel value.</p>
+
+    <button onclick="conn42()">Show 4 connectivity</button>
+    <button onclick="Reset2()">Back to Original</button>
+    <canvas id="canvas2" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+    <p>To preserve holes within regions one could keep track of when the color changes in magnitude and determine whether or not one is inside of the border or outside of the border. Thus maintaining the hole.</p>
+
+    <p>Image to use for region labeling</p>
+
+    <canvas id="canvas3" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+    <p>This code labels the regions based on 4 connectivity. There are 11 entries in the equivalence table to map each region to another.</p>
+
+    <canvas id="canvas4" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+    <button onclick="onOff1()">Show relevant JS code</button>
+    <script type="text/javascript">
+        function onOff1() {
+        var onOff = document.getElementById("item1").style.display;
+        if (onOff == "none") {
+            document.getElementById("item1").style.display="block";
+        } else{
+            document.getElementById("item1").style.display="none";
+        };
+        };
+    </script>
+
+    <pre id="item1" style="display:none;">
+        <code>
+    function findRegions(img, imgd) 
+    {
+        var zerocanx = Math.floor(ctx.viewportWidth / 2);
+        var zerocany = Math.floor(ctx.viewportHeight / 2);
+
+        altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+        var altpix = altImg.data;
+
+        var pix = imgd.data;
+        var rowSize = ctx.viewportWidth;
+        var colSize = ctx.viewportHeight;
+        var curregion = 0, tempregion = 0;
+        var h = [[-1,1],[-1,0],[-1,-1],[0,-1]];
+        var regionMap = [];
+        var regions = [];
+        var prevreg = [undefined,undefined,undefined,undefined], tempregion = [];
+        var updateFlag = true;
+        var j, currloc;
+
+        //regionMap[0] = 0;
+        console.log(regionMap.length, null, (null == 0),(regionMap[1] == undefined), regionMap[2]);
+        //find regions
+        for (var row = 0; row &lt; img.height; row++) 
+        {
+            for (var col = 0; col &lt; img.width; col++) 
+            {
+                if(pix[4*((row)*img.width+(col))] > 1)
+                {
+                    curregion = regionMap.length;
+                    // console.log(curregion);
+                    for (var i = 0; i &lt; h.length; i++) 
+                    {
+                        //check if surrounding pixels belong to
+                        //an already labeled region
+                        if (row+h[i][0] >= 0 ||  col+h[i][1] >= 0 || row+h[i][0] &lt; img.width || col+h[i][1] &lt; img.height) 
+                        {
+                            //console.log(regions[4*((row+h[i][0])*img.width+(col+h[i][1]))]);
+                            if (regions[4*((row+h[i][0])*img.width+(col+h[i][1]))] != undefined) 
+                            {
+                                updateFlag = false;
+                                prevreg[i] = regions[4*((row+h[i][0])*img.width+(col+h[i][1]))];
+                                //console.log(prevreg,curregion);
+ 
+                            };
+
+
+                        };
+
+                    };
+                    if (updateFlag) 
+                    {
+                        regionMap[curregion] = curregion;
+                        regions[4*((row)*img.width+(col))] = curregion;                    
+                    } else {
+                        for (var i = 0; i &lt; prevreg.length; i++)
+                        {
+                            if (prevreg[i] != undefined) {
+                                tempregion[tempregion.length] = prevreg[i];
+                            };
+                        };
+                        for (var i = 0; i &lt; tempregion.length - 1; i++) 
+                        {
+                            j = i + 1;
+                            if (tempregion[i] == tempregion[j]) 
+                            {
+                                //do nothing
+                            } else if (tempregion[i] > tempregion[j]) 
+                            {
+                                regionMap[tempregion[i]] = tempregion[j];
+                            } else {
+                                regionMap[tempregion[j]] = tempregion[i];
+                            };
+                        };
+                        regions[4*((row)*img.width+(col))] = tempregion[0];
+                    };
+
+                    updateFlag = true;
+                    prevreg = [undefined,undefined,undefined,undefined]; 
+                    tempregion = [];
+                };
+            };
+        };
+
+        console.log("for loop done",regionMap.length,curregion,regionMap[11]);
+        // console.log(curregion);
+        for (var i = 0; i &lt; regionMap.length; i++) {
+            console.log(i,regionMap[i]);
+        };
+
+        var colors = [[255,0,0],[0,255,0],[0,0,255],[100,100,100],[0,50,50],[200,100,50],[50,200,50],[150,50,200],[100,200,100],[55,0,0],[100,255,0],[100,0,255],[255,255,255]];
+        var colormap = [];
+        colormap[0] = colors[0];
+        //Assign colors
+        for (var i = 0; i &lt;= regionMap.length; i++) {
+            if (regionMap[i] != i) {
+                colormap[i] = colormap[regionMap[i]];
+            } else{
+                colormap[i] = colors[i];
+            };
+        };
+
+        var regionMapTemp = [];
+        curregion = 0;
+        //find regions
+        for (var row = 0; row &lt; img.height; row++) 
+        {
+            for (var col = 0; col &lt; img.width; col++) 
+            {
+                if(pix[4*((row)*img.width+(col))] > 1)
+                {
+                    curregion = regionMapTemp.length;
+                    // console.log(curregion);
+                    for (var i = 0; i &lt; h.length; i++) 
+                    {
+
+                        //check if surrounding pixels belong to
+                        //an already labeled region
+                        if (row+h[i][0] >= 0 ||  col+h[i][1] >= 0 || row+h[i][0] &lt; img.width || col+h[i][1] &lt; img.height) 
+                        {
+                            //console.log(regions[4*((row+h[i][0])*img.width+(col+h[i][1]))]);
+                            if (regions[4*((row+h[i][0])*img.width+(col+h[i][1]))] != undefined) 
+                            {
+                                updateFlag = false;
+                                prevreg[i] = regions[4*((row+h[i][0])*img.width+(col+h[i][1]))];
+                                //console.log(prevreg,curregion);
+                            };
+                        };
+
+                    };
+                    if (updateFlag) 
+                    {
+                        regionMapTemp[curregion] = curregion;
+                        //curregion++;
+                        regions[4*((row)*img.width+(col))] = curregion;                    
+                    } else {
+                        for (var i = 0; i &lt; prevreg.length; i++)
+                        {
+                            if (prevreg[i] != undefined) {
+                                tempregion[tempregion.length] = prevreg[i];
+                            };
+                        };
+                        for (var i = 0; i &lt; tempregion.length - 1; i++) 
+                        {
+                            j = i + 1;
+                            if (tempregion[i] == tempregion[j]) 
+                            {
+                                //do nothing
+                            } else if (tempregion[i] > tempregion[j]) 
+                            {
+                                regionMapTemp[tempregion[i]] = tempregion[j];
+                            } else {
+                                regionMapTemp[tempregion[j]] = tempregion[i];
+                            };
+                        };
+                        regions[4*((row)*img.width+(col))] = tempregion[0];
+                    };
+
+                    updateFlag = true;
+                    prevreg = [undefined,undefined,undefined,undefined]; 
+                    tempregion = [];
+                    // console.log(colormap[0],colormap[0][0],curregion -1,colormap[regionMap[curregion-1]]);
+                    currloc = 4*((row)*img.width+(col));
+                    //console.log("curr",curregion,"rm len",regionMap.length,"rm t len",regionMapTemp.length);
+
+                    pix[4*((row)*img.width+(col)) + 0] = colormap[regionMap[regions[currloc]]][0];
+                    pix[4*((row)*img.width+(col)) + 1] = colormap[regionMap[regions[currloc]]][1];
+                    pix[4*((row)*img.width+(col)) + 2] = colormap[regionMap[regions[currloc]]][2];
+                    pix[4*((row)*img.width+(col)) + 3] = 255;
+                    //curregion += 1;
+                };
+            };
+        };
+
+        //Copy pix data to canvas
+        for (var row = 0; row &lt; img.height; row++) {
+            for (var col = 0; col &lt; img.width; col++) {
+                altpix[4*(row*rowSize + col) ] = pix[4*(row * img.width + col)];
+                altpix[4*(row*rowSize + col)+1 ] =  pix[4*(row * img.width + col) + 1];
+
+                altpix[4*(row*rowSize + col)+2 ] =  pix[4*(row * img.width + col) + 2];
+
+                altpix[4*(row*rowSize + col)+3 ] =  pix[4*(row * img.width + col) + 3];
+            };
+        };
+
+
+
+        ctx.putImageData(altImg,0,0);
+    };
+        </code>
+    </pre>
+
+    <br/>
+    <p></p>
+    <a href="http://xksteven.com/">&lt;&lt; Back to other examples</a><br />
+</body>
+
+</html>

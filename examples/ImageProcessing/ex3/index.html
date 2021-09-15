@@ -1,0 +1,747 @@
+<html>
+
+<head>
+<title>Open Closing Operators</title>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<script type="text/javascript">
+    var ctx;
+    var img;
+    var altImg;
+    var OpSize = 3;
+
+    function initGL(canvas) 
+    {
+        try 
+        {
+            ctx = canvas.getContext("2d");
+            ctx.viewportWidth = canvas.width;
+            ctx.viewportHeight = canvas.height;
+            ctx.clearRect (0 , 0 , canvas.width, canvas.height);
+        } catch (e) { }
+        if (!ctx) 
+        {
+            alert("Could not initialise canvas, sorry :-(\n\
+                Maybe try Chome or Firefox?");
+        }
+    };
+
+
+    function drawScene(img) 
+    {
+        ctx.drawImage(img,0,0,img.width,img.height);
+    };
+
+    function findRegions(img, imgd) 
+    {
+        var zerocanx = Math.floor(ctx.viewportWidth / 2);
+        var zerocany = Math.floor(ctx.viewportHeight / 2);
+
+        altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+        var altpix = altImg.data;
+
+        var pix = imgd.data;
+        var rowSize = ctx.viewportWidth;
+        var colSize = ctx.viewportHeight;
+        var curregion = 0, tempregion = 0;
+        var h = [[-1,1],[-1,0],[-1,-1],[0,-1]];
+        var regionMap = [];
+        var regions = [];
+        var prevreg = [undefined,undefined,undefined,undefined], tempregion = [];
+        var updateFlag = true;
+        var j, currloc, minval,counter;
+
+        //regionMap[0] = 0;
+        console.log(regionMap.length, null, (null == 0),(regionMap[1] == undefined), regionMap[2]);
+        //find regions
+        for (var row = 0; row < img.height; row++) 
+        {
+            for (var col = 0; col < img.width; col++) 
+            {
+                if(pix[4*((row)*img.width+(col))] > 1)
+                {
+                    curregion = regionMap.length;
+                    // console.log(curregion);
+                    for (var i = 0; i < h.length; i++) 
+                    {
+                        //check if surrounding pixels belong to
+                        //an already labeled region
+                        if (row+h[i][0] >= 0 ||  col+h[i][1] >= 0 || row+h[i][0] < img.width || col+h[i][1] < img.height) 
+                        {
+                            //console.log(regions[4*((row+h[i][0])*img.width+(col+h[i][1]))]);
+                            if (regions[4*((row+h[i][0])*img.width+(col+h[i][1]))] != undefined) 
+                            {
+                                updateFlag = false;
+                                prevreg[i] = regions[4*((row+h[i][0])*img.width+(col+h[i][1]))];
+                                //console.log(prevreg,curregion);
+ 
+                            };
+
+
+                        };
+
+                    };
+                    if (updateFlag) 
+                    {
+                        regionMap[curregion] = curregion;
+                        regions[4*((row)*img.width+(col))] = curregion;                    
+                    } else {
+                        for (var i = 0; i < prevreg.length; i++)
+                        {
+                            if (prevreg[i] != undefined) {
+                                tempregion[tempregion.length] = prevreg[i];
+                            };
+                        };
+                        minval = Infinity;
+                        for (var i = 0; i < tempregion.length; i++) {
+                            if (tempregion[i] < minval) {
+                                minval = tempregion[i];
+                            }
+                        };
+                        for (var i = 0; i < tempregion.length; i++) 
+                        {
+                            if (tempregion[i] > minval) 
+                            {
+                                regionMap[tempregion[i]] = minval;
+                                tempregion[i] = minval;
+                            };
+                        };
+                        regions[4*((row)*img.width+(col))] = tempregion[0];
+                    };
+
+                    updateFlag = true;
+                    prevreg = [undefined,undefined,undefined,undefined]; 
+                    tempregion = [];
+                };
+            };
+        };
+
+        console.log("for loop done",regionMap.length,curregion,regionMap[11]);
+        // console.log(curregion);
+        for (var i = 0; i < regionMap.length; i++) {
+            console.log(i,regionMap[i]);
+        };
+
+        var colors = [[255,0,0],[2,255,0],[2,0,255],[100,100,100],[2,50,50],[200,100,50],[50,200,50],[150,50,200],[100,200,100],[55,0,0],[100,255,0],[100,0,255],[255,255,255],[50,50,50],[10,150,250],[200,10,150],[200,150,10],[2,255,0],[2,0,255],[100,100,100],[2,50,50],[200,100,50],[50,200,50],[150,50,200],[100,200,100],[55,0,0],[100,255,0],[100,0,255],[255,255,255],[50,50,50],[10,150,250],[200,10,150],[200,150,10],[2,255,0]];
+        var colormap = [];
+        colormap[0] = colors[0];
+        counter = 0;
+        //Assign colors
+        for (var i = 0; i <= regionMap.length; i++) {
+            if (regionMap[i] != i) {
+                colormap[i] = colormap[regionMap[i]];
+            } else{
+                colormap[i] = colors[counter];
+                counter++;
+            };
+        };
+
+        var regionMapTemp = [];
+        curregion = 0;
+        //find regions
+        for (var row = 0; row < img.height; row++) 
+        {
+            for (var col = 0; col < img.width; col++) 
+            {
+                if(pix[4*((row)*img.width+(col))] > 1)
+                {
+                    curregion = regionMapTemp.length;
+                    // console.log(curregion);
+                    for (var i = 0; i < h.length; i++) 
+                    {
+
+                        //check if surrounding pixels belong to
+                        //an already labeled region
+                        if (row+h[i][0] >= 0 ||  col+h[i][1] >= 0 || row+h[i][0] < img.width || col+h[i][1] < img.height) 
+                        {
+                            //console.log(regions[4*((row+h[i][0])*img.width+(col+h[i][1]))]);
+                            if (regions[4*((row+h[i][0])*img.width+(col+h[i][1]))] != undefined) 
+                            {
+                                updateFlag = false;
+                                prevreg[i] = regions[4*((row+h[i][0])*img.width+(col+h[i][1]))];
+                                //console.log(prevreg,curregion);
+                            };
+                        };
+
+                    };
+                    if (updateFlag) 
+                    {
+                        regionMapTemp[curregion] = curregion;
+                        //curregion++;
+                        regions[4*((row)*img.width+(col))] = curregion;                    
+                    } else {
+                        for (var i = 0; i < prevreg.length; i++)
+                        {
+                            if (prevreg[i] != undefined) {
+                                tempregion[tempregion.length] = prevreg[i];
+                            };
+                        };
+                        minval = Infinity;
+                        for (var i = 0; i < tempregion.length; i++) {
+                            if (tempregion[i] < minval) {
+                                minval = tempregion[i];
+                            }
+                        };
+                        for (var i = 0; i < tempregion.length; i++) 
+                        {
+                            if (tempregion[i] == minval) 
+                            {
+                                //do nothing
+                            } else if (tempregion[i] > minval) 
+                            {
+                                regionMap[tempregion[i]] = minval;
+                                tempregion[i] = minval;
+                            };
+                        };
+                        regions[4*((row)*img.width+(col))] = tempregion[0];
+                    };
+
+                    updateFlag = true;
+                    prevreg = [undefined,undefined,undefined,undefined]; 
+                    tempregion = [];
+                    // console.log(colormap[0],colormap[0][0],curregion -1,colormap[regionMap[curregion-1]]);
+                    currloc = 4*((row)*img.width+(col));
+                    //console.log("curr",curregion,"rm len",regionMap.length,"rm t len",regionMapTemp.length);
+
+                    pix[4*((row)*img.width+(col)) + 0] = colormap[regionMap[regions[currloc]]][0];
+                    pix[4*((row)*img.width+(col)) + 1] = colormap[regionMap[regions[currloc]]][1];
+                    pix[4*((row)*img.width+(col)) + 2] = colormap[regionMap[regions[currloc]]][2];
+                    pix[4*((row)*img.width+(col)) + 3] = 255;
+                    //curregion += 1;
+                };
+            };
+        };
+
+        //Copy pix data to canvas
+        for (var row = 0; row < img.height; row++) {
+            for (var col = 0; col < img.width; col++) {
+                altpix[4*(row*rowSize + col) ] = pix[4*(row * img.width + col)];
+                altpix[4*(row*rowSize + col)+1 ] =  pix[4*(row * img.width + col) + 1];
+
+                altpix[4*(row*rowSize + col)+2 ] =  pix[4*(row * img.width + col) + 2];
+
+                altpix[4*(row*rowSize + col)+3 ] =  pix[4*(row * img.width + col) + 3];
+            };
+        };
+
+
+
+        ctx.putImageData(altImg,0,0);
+    };
+
+    function ErodebyN(img, imgd, N) 
+    {
+
+        altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+        var altpix = altImg.data;
+
+        var pix = imgd.data;
+        var rowSize = ctx.viewportWidth;
+        var colSize = ctx.viewportHeight;
+        var curregion = 0, tempregion = 0;
+        var counter = 0;
+
+        var temp;
+        var h = [];
+        var halfn = Math.floor(N/2);
+        var n = (-1)*halfn;
+
+        for (var i = 0; i < N; i++) {
+            for (var j = 0; j < N; j++) {
+                if ( (n+i)*(n+i) + (n+j)*(n+j) <= N*N)  
+                {
+                    temp = [n + i,n+j];
+                    h[counter] = (temp);
+                    counter++;
+                };
+
+                // //row
+                // h[i*N+j][0] = n + i;
+                // //col
+                // h[i*N+j][1] = n + j;
+            };
+        };
+        counter = 0;
+
+        //Erode it
+        for (var row = 0; row < img.height; row++) 
+        {
+            for (var col = 0; col < img.width; col++) 
+            {
+                if(pix[4*((row)*img.width+(col))] > 1)
+                {
+
+                    for (var i = 0; i < h.length; i++) 
+                    {
+                        //check if surrounding pixels belong to
+                        //an already labeled region
+                        if (row+h[i][0] >= 0 ||  col+h[i][1] >= 0 || row+h[i][0] < img.width || col+h[i][1] < img.height) 
+                        {
+                            if (pix[4*((row+h[i][0])*img.width+(col+h[i][1]))] > 1) 
+                            {
+                                counter++;
+                            } else {break;};
+
+
+                        } else{break;};
+
+                    };
+
+                };
+                //console.log(counter,N*N);
+                if (counter == N*N) {
+                    altpix[4*(row*rowSize + col) ] = 255;
+                    altpix[4*(row*rowSize + col)+1 ] = 255;
+
+                    altpix[4*(row*rowSize + col)+2 ] = 255;
+
+                    altpix[4*(row*rowSize + col)+3 ] = 255;
+                } else
+                {
+                    altpix[4*(row*rowSize + col) ] = 0;
+                    altpix[4*(row*rowSize + col)+1 ] = 0;
+
+                    altpix[4*(row*rowSize + col)+2 ] = 0;
+
+                    altpix[4*(row*rowSize + col)+3 ] = 255;
+                };
+                counter = 0;
+
+            };
+        };
+
+        ctx.putImageData(altImg,0,0);
+    };
+
+    function DilatebyN(img, imgd, N) 
+    {
+
+        altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+        var altpix = altImg.data;
+
+        var pix = imgd.data;
+        var rowSize = ctx.viewportWidth;
+        var colSize = ctx.viewportHeight;
+        var updateFlag = true;
+
+        var temp;
+        var h = [];
+        var halfn = Math.floor(N/2);
+        var n = (-1)*halfn;
+        var counter = 0;
+
+        for (var i = 0; i < N; i++) {
+            for (var j = 0; j < N; j++) {
+                if ( (n+i)*(n+i) + (n+j)*(n+j) <= N*N)  
+                {
+                    temp = [n + i,n+j];
+                    h[counter] = (temp);
+                    counter++;
+                };
+
+                // square operator
+                // temp = [n + i,n+j];
+                // h[i*N+j] = (temp);
+
+            };
+        };
+
+
+        counter = 0;
+
+        //Dilate it
+        for (var row = 0; row < img.height; row++) 
+        {
+            for (var col = 0; col < img.width; col++) 
+            {
+
+                for (var i = 0; i < h.length; i++) 
+                {
+                    //check if surrounding pixels belong to
+                    //an already labeled region
+                    if (row+h[i][0] >= 0 ||  col+h[i][1] >= 0 || row+h[i][0] < img.width || col+h[i][1] < img.height) 
+                    {
+                        if (pix[4*((row+h[i][0])*img.width+(col+h[i][1]))] > 1) 
+                        {
+                            altpix[4*(row*rowSize + col) ] = 255;
+                            altpix[4*(row*rowSize + col)+1 ] = 255;
+
+                            altpix[4*(row*rowSize + col)+2 ] = 255;
+
+                            altpix[4*(row*rowSize + col)+3 ] = 255;
+                            updateFlag = false;
+                            break;
+                        };
+
+                    };
+
+                };
+                if (updateFlag) 
+                {
+                    altpix[4*(row*rowSize + col) ] = 0;
+                    altpix[4*(row*rowSize + col)+1 ] = 0;
+
+                    altpix[4*(row*rowSize + col)+2 ] = 0;
+
+                    altpix[4*(row*rowSize + col)+3 ] = 255;
+                };
+                updateFlag = true;
+
+            };
+        };
+
+        ctx.putImageData(altImg,0,0);
+    };
+    function findArea(img, imgd) {
+        var pix = imgd.data;
+        var counter = 0;
+
+        //find Area
+        for (var row = 0; row < img.height; row++) 
+        {
+            for (var col = 0; col < img.width; col++) 
+            {
+
+                if (pix[4*((row)*img.width+(col))] > 1) 
+                {
+                    counter++;
+                };
+
+            };
+        };
+
+        document.getElementById("Area").innerHTML = counter;
+    };
+
+    function Erode() {
+        var canvas2 = document.getElementById("canvas2");
+        ctx = canvas2.getContext("2d");
+        imgd = ctx.getImageData(0,0,img.width,img.height);
+        ErodebyN(img,imgd,OpSize);
+
+    };
+
+    function Dilate() {
+        var canvas2 = document.getElementById("canvas2");
+        ctx = canvas2.getContext("2d");
+        imgd = ctx.getImageData(0,0,img.width,img.height);
+        DilatebyN(img,imgd,OpSize);
+    };
+
+    function Open() {
+        var canvas2 = document.getElementById("canvas2");
+        ctx = canvas2.getContext("2d");
+        imgd = ctx.getImageData(0,0,img.width,img.height);
+        ErodebyN(img,imgd,OpSize);
+        imgd = ctx.getImageData(0,0,img.width,img.height);
+        DilatebyN(img,imgd,OpSize);
+
+    };
+    function FindRegions2() {
+        var canvas0 = document.getElementById("canvas0");
+        var canvas2 = document.getElementById("canvas2");
+        ctx = canvas2.getContext("2d");
+        imgd = ctx.getImageData(0,0,canvas0.width,canvas0.height);
+        findRegions(img,imgd);
+
+    };
+
+    function FindRegions1() {
+        var canvas0 = document.getElementById("canvas0");
+        var canvas1 = document.getElementById("canvas1");
+        ctx = canvas1.getContext("2d");
+        imgd = ctx.getImageData(0,0,canvas0.width,canvas0.height);
+        initGL(canvas1);
+        findRegions(img,imgd);
+
+    };
+    function Reset() {
+        var canvas0 = document.getElementById("canvas0");
+        var canvas1 = document.getElementById("canvas1");
+        ctx0 = canvas0.getContext("2d");
+        imgd = ctx0.getImageData(0,0,canvas0.width,canvas0.height);
+        initGL(canvas1);
+        ctx.putImageData(imgd,0,0);
+        //console.log("I'm reseting");
+    };
+    function Reset2() {
+        var canvas0 = document.getElementById("canvas0");
+        var canvas2 = document.getElementById("canvas2");
+        ctx0 = canvas0.getContext("2d");
+        imgd = ctx0.getImageData(0,0,canvas0.width,canvas0.height);
+        initGL(canvas2);
+        ctx.putImageData(imgd,0,0);
+        //console.log("I'm reseting");
+    };
+
+    function showValue(newValue)
+    {
+        document.getElementById("range").innerHTML = newValue;
+        OpSize = newValue;
+    }
+
+
+    function findAreas()
+    {
+        var imgd;
+        var canvas2 = document.getElementById("canvas2");
+        ctx = canvas2.getContext("2d");
+        imgd = ctx.getImageData(0,0,img.width,img.height);
+        findArea(img, imgd);
+    };
+
+    function webGLStart() {
+        var canvas0 = document.getElementById("canvas0");
+        var canvas1 = document.getElementById("canvas1");
+        var canvas2 = document.getElementById("canvas2");
+        var canvas3 = document.getElementById("canvas3");
+        img = new Image();
+        img.src = "figure_problem_set_4.png";
+        var imgd;
+        img.onload = function() {
+            initGL(canvas0);
+            canvas0.width = img.width;
+            canvas0.height = img.height;
+            drawScene(img);
+            imgd = ctx.getImageData(0,0,canvas0.width,canvas0.height);
+            initGL(canvas1);
+            ctx.putImageData(imgd,0,0);
+            initGL(canvas2);
+            ctx.putImageData(imgd,0,0);
+            // ErodebyN(img,imgd,17);
+            // DilatebyN(img,imgd,17);
+            //findAreas();
+        };
+        var img2 = new Image();
+        img2.src = "OpSizeGraph.png";
+        img2.onload = function() {
+            var tempctx = ctx;
+            ctx = canvas3.getContext("2d");
+            canvas3.width = img2.width;
+            canvas3.height = img2.height;
+            drawScene(img2);
+            ctx = tempctx;
+        };
+
+    };
+</script>
+
+
+</head>
+
+
+<body onload="webGLStart();">
+    <p>Image to Use: </p>
+
+    <canvas id="canvas0" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+    <p></p>
+
+    <button onclick="FindRegions1()">Find Regions</button>
+    <button onclick="Reset()">Back to Original</button>
+    <canvas id="canvas1" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+    <p>Select Size of n x n circular operator to use to erode, dilate, or open (open = erode then dialte) the image</p>
+    <input style="padding-left=100px" type="range" min="1" max="99" value="3" step="2" onchange="showValue(this.value)" />
+    <span id="range">3</span>
+    <p></p>
+    <button onclick="Erode()">Erode</button>
+    <button onclick="Dilate()">Dilate</button>
+    <button onclick="Open()">Open</button>
+    <button onclick="FindRegions2()">Find Regions</button>
+    <button onclick="Reset2()">Back to Original</button>
+    <button onclick="findAreas()">Find Area</button> 
+    <p>Area = </p>
+    <span id="Area">0</span>
+
+    <canvas id="canvas2" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+    <button onclick="onOff0()">Show relevant JS code</button>
+    <script type="text/javascript">
+        function onOff0() {
+        var onOff = document.getElementById("item0").style.display;
+        if (onOff == "none") {
+            document.getElementById("item0").style.display="block";
+        } else{
+            document.getElementById("item0").style.display="none";
+        };
+        };
+    </script>
+    <pre id="item0" style="display:none;">
+        Javascript Code:
+        <code>
+            function ErodebyN(img, imgd, N) 
+            {
+
+                altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+                var altpix = altImg.data;
+
+                var pix = imgd.data;
+                var rowSize = ctx.viewportWidth;
+                var colSize = ctx.viewportHeight;
+                var curregion = 0, tempregion = 0;
+                var counter = 0;
+
+                var temp;
+                var h = [];
+                var halfn = Math.floor(N/2);
+                var n = (-1)*halfn;
+
+                for (var i = 0; i &lt; N; i++) {
+                    for (var j = 0; j &lt; N; j++) {
+                        if ( (n+i)*(n+i) + (n+j)*(n+j) &lt;= N*N)  
+                        {
+                            temp = [n + i,n+j];
+                            h[counter] = (temp);
+                            counter++;
+                        };
+
+                        // //row
+                        // h[i*N+j][0] = n + i;
+                        // //col
+                        // h[i*N+j][1] = n + j;
+                    };
+                };
+                counter = 0;
+
+                //Erode it
+                for (var row = 0; row &lt; img.height; row++) 
+                {
+                    for (var col = 0; col &lt; img.width; col++) 
+                    {
+                        if(pix[4*((row)*img.width+(col))] > 1)
+                        {
+
+                            for (var i = 0; i &lt; h.length; i++) 
+                            {
+                                //check if surrounding pixels belong to
+                                //an already labeled region
+                                if (row+h[i][0] >= 0 ||  col+h[i][1] >= 0 || row+h[i][0] &lt; img.width || col+h[i][1] &lt; img.height) 
+                                {
+                                    if (pix[4*((row+h[i][0])*img.width+(col+h[i][1]))] > 1) 
+                                    {
+                                        counter++;
+                                    } else {break;};
+
+
+                                } else{break;};
+
+                            };
+
+                        };
+                        //console.log(counter,N*N);
+                        if (counter == N*N) {
+                            altpix[4*(row*rowSize + col) ] = 255;
+                            altpix[4*(row*rowSize + col)+1 ] = 255;
+
+                            altpix[4*(row*rowSize + col)+2 ] = 255;
+
+                            altpix[4*(row*rowSize + col)+3 ] = 255;
+                        } else
+                        {
+                            altpix[4*(row*rowSize + col) ] = 0;
+                            altpix[4*(row*rowSize + col)+1 ] = 0;
+
+                            altpix[4*(row*rowSize + col)+2 ] = 0;
+
+                            altpix[4*(row*rowSize + col)+3 ] = 255;
+                        };
+                        counter = 0;
+
+                    };
+                };
+
+                ctx.putImageData(altImg,0,0);
+            };
+
+            function DilatebyN(img, imgd, N) 
+            {
+
+                altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+                var altpix = altImg.data;
+
+                var pix = imgd.data;
+                var rowSize = ctx.viewportWidth;
+                var colSize = ctx.viewportHeight;
+                var updateFlag = true;
+
+                var temp;
+                var h = [];
+                var halfn = Math.floor(N/2);
+                var n = (-1)*halfn;
+                var counter = 0;
+
+                for (var i = 0; i &lt; N; i++) {
+                    for (var j = 0; j &lt; N; j++) {
+                        if ( (n+i)*(n+i) + (n+j)*(n+j) &lt;= N*N)  
+                        {
+                            temp = [n + i,n+j];
+                            h[counter] = (temp);
+                            counter++;
+                        };
+
+                        // square operator
+                        // temp = [n + i,n+j];
+                        // h[i*N+j] = (temp);
+
+                    };
+                };
+
+
+                counter = 0;
+
+                //Dilate it
+                for (var row = 0; row &lt; img.height; row++) 
+                {
+                    for (var col = 0; col &lt; img.width; col++) 
+                    {
+
+                        for (var i = 0; i &lt; h.length; i++) 
+                        {
+                            //check if surrounding pixels belong to
+                            //an already labeled region
+                            if (row+h[i][0] >= 0 ||  col+h[i][1] >= 0 || row+h[i][0] &lt; img.width || col+h[i][1] &lt; img.height) 
+                            {
+                                if (pix[4*((row+h[i][0])*img.width+(col+h[i][1]))] > 1) 
+                                {
+                                    altpix[4*(row*rowSize + col) ] = 255;
+                                    altpix[4*(row*rowSize + col)+1 ] = 255;
+
+                                    altpix[4*(row*rowSize + col)+2 ] = 255;
+
+                                    altpix[4*(row*rowSize + col)+3 ] = 255;
+                                    updateFlag = false;
+                                    break;
+                                };
+
+                            };
+
+                        };
+                        if (updateFlag) 
+                        {
+                            altpix[4*(row*rowSize + col) ] = 0;
+                            altpix[4*(row*rowSize + col)+1 ] = 0;
+
+                            altpix[4*(row*rowSize + col)+2 ] = 0;
+
+                            altpix[4*(row*rowSize + col)+3 ] = 255;
+                        };
+                        updateFlag = true;
+
+                    };
+                };
+
+                ctx.putImageData(altImg,0,0);
+            };
+        </code>
+    </pre>
+
+    <p> Plot of graph of Area versus Operator Size.  The first point equals the original area.</p>
+    <canvas id="canvas3" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+    <br/>
+    <p></p>
+    <a href="http://xksteven.com/">&lt;&lt; Back to other examples</a><br />
+</body>
+
+</html>

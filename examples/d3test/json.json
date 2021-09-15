@@ -1,0 +1,27 @@
+{
+	"nodes":[
+	{"name":"FIG9889","group":"Mevalonate kinase "},
+	{"name":"FIG7126","group":"Multimodular transpeptidase-transglycosylase (EC 2.4.1.129) (EC 3.4.-.-) / Penicillin-binding protein 1A/1B (PBP1)"},
+	{"name":"FIG1783","group":"Diphosphomevalonate decarboxylase "},
+	{"name":"FIG11236","group":"Phosphomevalonate kinase "},
+	{"name":"FIG449","group":"1-hydroxy-2-methyl-2-(E)-butenyl 4-diphosphate synthase (EC 1.17.7.1)"},
+	{"name":"FIG135993","group":"Hydroxymethylglutaryl-CoA synthase (EC 2.3.3.10)"},
+	{"name":"FIG145793","group":"UDP-N-acetylmuramoylalanyl-D-glutamate--L-lysine ligase "},
+	{"name":"FIG381","group":"4-hydroxy-3-methylbut-2-enyl diphosphate reductase (EC 1.17.1.2)"},
+	{"name":"FIG401","group":"1-deoxy-D-xylulose 5-phosphate reductoisomerase (EC 1.1.1.267)"},
+	{"name":"FIG1450","group":"Hydroxymethylglutaryl-CoA reductase "},
+	{"name":"FIG7296","group":"ATP-dependent RNA helicase YqfR"}
+	],
+	"links":[
+	{"source":"FIG9889","target":"FIG7126","value":0.535974},
+	{"source":"FIG9889","target":"FIG1783","value":0.782936},
+	{"source":"FIG9889","target":"FIG11236","value":0.682721},
+	{"source":"FIG9889","target":"FIG449","value":0.658128},
+	{"source":"FIG9889","target":"FIG135993","value":0.651654},
+	{"source":"FIG9889","target":"FIG145793","value":0.597518},
+	{"source":"FIG9889","target":"FIG381","value":0.592358},
+	{"source":"FIG9889","target":"FIG401","value":0.574843},
+	{"source":"FIG9889","target":"FIG1450","value":0.567108},
+	{"source":"FIG9889","target":"FIG7296","value":0.536682}
+	]
+}

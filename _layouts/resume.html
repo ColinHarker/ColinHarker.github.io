@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ site.description }}">
+    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
+    <link rel="stylesheet" href="{{ "/css/skeleton.css" | prepend: site.baseurl }}">
+    <link rel="stylesheet" href="{{ "/css/normalize.css" | prepend: site.baseurl }}">
+    <link rel="stylesheet" href="{{ "/css/resume.css" | prepend: site.baseurl }}">
+
+    <!-- Because we removed the header add back in the google tag -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-60607608-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'UA-60607608-1');
+    </script>
+
+
+</head>
+
+    <body>
+
+    {% comment %}
+    {% include header.html %}
+    {% endcomment %}
+
+   
+
+    <div class="page-content">
+      <div class="wrap">
+        <div class="post">
+
+		  <article class="post-content">
+		  {{ content }}
+		  </article>
+
+		</div>
+      </div>
+    </div>
+
+    {% comment %}
+    {% include footer.html %}
+    {% endcomment %}
+
+    </body>
+</html>

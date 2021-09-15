@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+/*.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}*/
+
+
+.node text {
+  pointer-events: none;
+  font: 10px sans-serif;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
+
+h3 {
+    color: #1ABC9C;
+    text-align:center;  
+    font-style: italic;
+    font-size: 14px;
+    font-family: "Helvetica";
+}
+
+</style>
+<head>  
+  <!-- Google Analyitics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-60607608-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</head>
+<body>
+    <h3>On pressing spacebar after clicking a node it will highlight its neighbors with probabilities shown on the edges. Drag and drop a node to fix in place, double click to release.</h3>
+<form>
+    <h3> Link threshold 0 <input type="range" id="thersholdSlider" name="points" value = 0 min="0" max="20" step="1" onchange="threshold(this.value)"> 20 Current Val: <var id="CurrVal">0</var></h3> 
+</form>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+var width = 960,
+    height = 500;
+
+var color = d3.scale.category20();
+
+//for highlighting which nodes and edges
+var toggle = 0;
+var linkedByIndex = {};
+
+//Force directed
+var force = self.force = d3.layout.force()
+    .charge(-250)
+    .linkDistance(70)
+    .size([width, height]);
+
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+//Fixing a node if it's dragged
+var node_drag = d3.behavior.drag()
+        .on("dragstart", dragstart)
+        .on("drag", dragmove)
+        .on("dragend", dragend);
+
+    function dragstart(d, i) {
+        force.stop() // stops the force auto positioning before you start dragging
+    }
+
+    function dragmove(d, i) {
+        d.px += d3.event.dx;
+        d.py += d3.event.dy;
+        d.x += d3.event.dx;
+        d.y += d3.event.dy; 
+        tick();
+    }
+
+    function dragend(d, i) {
+
+      // if (d.fixed == false) {connectedNodes(d);};
+
+        d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+        tick();
+        force.resume();
+    }
+
+    function releasenode(d) {
+        d.fixed = false;
+
+        // connectedNodes(d);
+
+        //force.resume();
+    }
+    //end of code for new drag and fix
+
+  // graph = JSON.parse("miserables.json");
+  var graphRec;
+  var link, node, edgepaths, edgelabels;
+
+var graphic = d3.json("graph.json", function(error, graph) {
+  graphic = graph;
+  graphRec=JSON.parse(JSON.stringify(graph));
+
+  // This handles when edges are not indexed by enumerated value
+    // var edges = [];
+    // console.log(graph.links);
+    // graph.links.forEach(function(e) 
+    // { 
+    //   var sourceNode = graph.nodes.filter(function(n) { return n.name === e.source; })[0];
+    //   var targetNode = graph.nodes.filter(function(n) { return n.name === e.target; })[0];
+        
+    //   edges.push({source: sourceNode, target: targetNode, value: e.value});
+    // });
+    // sol src: http://stackoverflow.com/questions/23986466/d3-force-layout-linking-nodes-by-name-instead-of-index
+    // End edge/link handling
+
+  force
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .start();
+
+  link = svg.selectAll(".link")
+      .data(graph.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { 
+        return Math.sqrt(d.value); 
+      });
+
+edgepaths = svg.selectAll(".edgepath")
+        .data(graph.links)
+        .enter()
+        .append('path')
+        .attr({'d': function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y},
+               'class':'edgepath',
+               'fill-opacity':0,
+               'stroke-opacity':0,
+               'fill':'blue',
+               'stroke':'red',
+               'id':function(d,i) {return 'edgepath'+i}})
+        .style("pointer-events", "none");
+
+  edgelabels = svg.selectAll(".edgelabel")
+      .data(graph.links)
+      .enter()
+      .append('text')
+      .style("opacity",0)
+      .style("pointer-events", "none")
+      .attr({'class':'edgelabel',
+             'id':function(d,i){return 'edgelabel'+i},
+             'dx':80,
+             'dy':0,
+             'font-size':10,
+             'fill':'#aaa'});
+
+  edgelabels
+      .append('textPath')
+      .attr('xlink:href',function(d,i) {return '#edgepath'+i})
+      .style("pointer-events", "none")
+      .data(graph.links)
+      .text(function(d) { 
+        return ('Prob ' + d.value); 
+      }); //function(d,i){return 'label '+i});
+
+
+  node = svg.selectAll(".node")
+      .data(graph.nodes)
+    .enter().append("g")
+      .attr("class", "node")
+      //.call(force.drag)
+      // .on('dblclick', releasenode)
+      // .on('dblclick', connectedNodes)
+      .on('dblclick',releasenode)
+      .on('click', function () { focused = this.__data__; })
+      .call(node_drag);
+
+  // node.append("title")
+  //     .text(function(d) { return d.name; });
+
+node.append("circle")
+    .attr("r", 8)
+    .style("fill", function (d) { return color(d.group); })
+
+  node.append("text")
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name });
+
+  //Setting up array for turning on selected node
+  for (i = 0; i < node.length; i++) {
+    linkedByIndex[i + "," + i] = 1;
+  };
+  link.forEach(function (d) {
+    d.forEach(function(x){
+      linkedByIndex[x.__data__.source.index + "," + x.__data__.target.index] = 1;
+      // console.log(x.__data__.source.index);
+      // console.log(x.source);
+      // console.log(x.source.index);
+    });
+  });
+  //End of setup for turning on selected node
+
+  force.on("tick", tick);
+});
+
+
+  function tick() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    // node.attr("cx", function(d) { return d.x; })
+        // .attr("cy", function(d) { return d.y; });
+
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+    edgepaths.attr('d', function(d) { var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y;
+                                           //console.log(d)
+                                           return path}); 
+
+    edgelabels.attr('transform',function(d,i){
+            if (d.target.x<d.source.x){
+                bbox = this.getBBox();
+                rx = bbox.x+bbox.width/2;
+                ry = bbox.y+bbox.height/2;
+                return 'rotate(180 '+rx+' '+ry+')';
+                }
+            else {
+                return 'rotate(0)';
+                }
+              });
+  };
+
+function threshold(thresh) {
+  graphic.links.splice(0, graphic.links.length);
+
+  for (var i = 0; i < graphRec.links.length; i++) {
+    if (graphRec.links[i].value > thresh) {graphic.links.push(graphRec.links[i]);}
+  }
+  document.getElementById("CurrVal").innerHTML=thresh;
+  restart();
+}
+
+//Restart the visualisation after any node and link changes
+
+function restart() {
+  link = link.data(graphic.links);
+  link.exit().remove();
+  link.enter().insert("line", ".node").attr("class", "link");
+  node = node.data(graphic.nodes);
+  node.enter().insert("circle", ".cursor").attr("class", "node").attr("r", 5).call(force.drag);
+  force.start();
+}
+
+var focused = null;
+// only respond once per keydown
+var lastKeyDown = -1;
+
+function keydown() {
+  d3.event.preventDefault();
+
+  if(lastKeyDown !== -1) return;
+  lastKeyDown = d3.event.keyCode;
+
+  // space
+  if(d3.event.keyCode === 32) { 
+    if(focused == null) {return}; 
+    d3.select(focused); 
+    connectedNodes(focused);
+  }
+};
+
+function keyup() {
+  lastKeyDown = -1;
+}
+
+//This function looks up whether a pair are neighbours  
+function neighboring(a, b) {
+  return linkedByIndex[a.index + "," + b.index];
+}
+function connectedNodes(mynode) 
+{
+    if (toggle == 0) {
+        //Reduce the opacity of all but the neighbouring nodes
+        // d = d3.select(this).node.__data__;
+        d = mynode;
+        // console.log(d3.select(this).node());
+
+        node.style("opacity", function (o) {
+            // console.log("d = ", d, "o = ", o);
+            return d == o || neighboring(d, o) || neighboring(o, d) ? 1 : 0.1;
+        });
+        
+        link.style("opacity", function (o) {
+            return d.index==o.source.index || d.index==o.target.index ? 1 : 0.1;
+        });
+        edgelabels.style("opacity", function (o) {
+            return d.index==o.source.index || d.index==o.target.index ? 1 : 0.1;
+        });
+        //Reduce the op
+        toggle = 1;
+    } else 
+    {
+        //Put them back to opacity=1
+        node.style("opacity", 1);
+        link.style("opacity", 1);
+        edgelabels.style("opacity", 0);
+        toggle = 0;
+    }
+    // restart();
+}
+
+d3.select(window)
+  .on('keydown', keydown)
+  .on('keyup', keyup);
+
+</script>

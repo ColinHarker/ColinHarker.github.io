@@ -1,0 +1,750 @@
+<html>
+
+<head>
+<title>Hough Transform and Haar Wavelet</title>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<script type="text/javascript">
+    var ctx;
+    var img;
+    var altImg;
+
+    function initGL(canvas) 
+    {
+        try 
+        {
+            ctx = canvas.getContext("2d");
+            ctx.viewportWidth = canvas.width;
+            ctx.viewportHeight = canvas.height;
+            ctx.clearRect (0 , 0 , canvas.width, canvas.height);
+        } catch (e) { }
+        if (!ctx) 
+        {
+            alert("Could not initialise canvas, sorry :-(\n\
+                Maybe try Chome or Firefox?");
+        }
+    };
+
+
+    function drawScene(img) 
+    {
+        ctx.drawImage(img,0,0,img.width,img.height);
+    };
+
+    function buildLookUpTable(radiusMin, radiusMax) 
+    {
+        var i = 0;
+        var incDen = 4 * radiusMin;
+        var radiusInc = 1;
+        var lut = [[[]],[[]]];
+
+        for (var i = 0; i < radiusMax; i++) 
+        {
+            lut[0][i] = [];
+            lut[1][i] = []; 
+        };
+
+        // for (var tempRadius = radiusMin; tempRadius <= radiusMax; tempRadius++) 
+        // {
+        //     i = 0;
+        //     for (var inc = 0; inc < incDen; inc+=0.1) 
+        //     {
+        //         var angle = (2*Math.PI * inc) / incDen;
+        //         var indexR = (tempRadius - radiusMin)/radiusInc;
+        //         var rcos = Math.round(tempRadius * Math.cos(angle));
+        //         var rsin = Math.round(tempRadius * Math.sin(angle));
+        //         if (i == 0 || ( (rcos != lut[0][indexR][i]) && (rsin != lut[1][indexR][i])) ) 
+        //         {
+        //             lut[0][indexR][i] = rcos;
+        //             lut[1][indexR][i] = rsin;
+        //             i++;
+        //         };
+        //     };
+
+        // };
+
+        for (var tempRadius = radiusMin; tempRadius <= radiusMax; tempRadius++) 
+        {
+            i = 0;
+            for (var row = 0; row < tempRadius; row++) 
+            {
+                for (var col = 0; col < tempRadius; col++) 
+                {
+                    var dist = Math.sqrt(row*row + col*col);
+                    var indexR = tempRadius - radiusMin; 
+                    if ((dist <= (tempRadius + 0.5)) && (dist >= (tempRadius - 0.5) ) ) 
+                    {
+                        lut[0][indexR][i] = col;
+                        lut[1][indexR][i] = row;
+                        i++;
+                    };
+                };
+            };
+        };        
+
+        return lut;
+    };
+
+    function houghTransform(img, imgd, thresh) 
+    {
+
+        altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+        var altpix = altImg.data;
+        var pix = imgd.data;
+        var rowSize = ctx.viewportWidth;
+        var colSize = ctx.viewportHeight;
+
+        for (var row = 1; row < img.height - 1; row++) 
+        {
+            for (var col = 1; col < img.width - 1; col++) 
+            {
+                altpix[4*(row*rowSize + col) ] = 0;
+                altpix[4*(row*rowSize + col)+1 ] = 0;
+
+                altpix[4*(row*rowSize + col)+2 ] = 0;
+
+                altpix[4*(row*rowSize + col)+3 ] = 255;
+            };
+        };
+
+        var height = img.height;
+        var width = img.width;
+        var radiusMin = 1;
+        var radiusMax = 50;
+
+        var lut = buildLookUpTable(radiusMin, radiusMax);
+
+        var houghValues =  [[[]]];
+
+        for (var i = 0; i <= img.width; i++) 
+        {
+            houghValues[i] = [];
+            for (var j = 0; j <= height; j++) 
+            {
+                houghValues[i][j] = [];
+                for (var k = 0; k < radiusMax + 1; k++) 
+                {
+                    houghValues[i][j][k] = 0;
+                };
+            };
+        };
+
+        //Hough Transform
+        for (var row = 1; row < img.height - 1; row++) 
+        {
+            for (var col = 1; col < img.width - 1; col++) 
+            {
+
+                for (var tempRadius = radiusMin; tempRadius <= radiusMax; tempRadius++) 
+                {
+
+                    if (pix[4*((row)*img.width+(col))] > 1) 
+                    {
+                        var indexR = (tempRadius - radiusMin);
+                        for (var i = 0; i < lut[0][indexR].length; i++) 
+                        {
+                            var a = col + lut[1][indexR][i];
+                            var b = row + lut[0][indexR][i];
+                            if((b >= 0) && (b < height) && (a >= 0) && (a < width)) 
+                            {
+                                houghValues[a][b][indexR-1] = houghValues[a][b][indexR-1] + 1;
+                                altpix[4*(b*rowSize + a) ] += 1;
+                                altpix[4*(b*rowSize + a)+1 ] += 0;
+
+                                altpix[4*(b*rowSize + a)+2 ] += 1;
+
+                                altpix[4*(b*rowSize + a)+3 ] = 255;
+                            }
+                        };
+                    };
+                };
+            };
+        };
+
+        //find the max radius
+        var maxCounter = 0;
+        var maxRs = [];
+
+        for (var k = 0; k < radiusMax + 1; k++ ) 
+        {
+            for (var j = 0; j < img.height; j++) 
+            {
+                for (var i = 0; i < img.width; i++) 
+                {
+                    if (houghValues[i][j][k] > maxCounter) 
+                    {
+                        maxCounter = houghValues[i][j][k];
+                    };
+                };
+            };
+        };
+
+        for (var k = 0; k < radiusMax + 1; k++ ) 
+        {
+            for (var j = 0; j < img.height; j++) 
+            {
+                for (var i = 0; i < img.width; i++) 
+                {
+                    if (houghValues[i][j][k] >= maxCounter -thresh) 
+                    {
+                        for (var row = -k; row <= k; row++) 
+                        {
+                            for (var col = -k; col <= k; col++) 
+                            {
+                                var dist = Math.sqrt(row*row + col*col);
+                                var b = j + row;
+                                var a = i + col;
+                                if ((dist <= (k + 0.5)) && (dist >= (k - 0.5) ) ) 
+                                {
+                                altpix[4*(b*rowSize + a) ] += 0;
+                                altpix[4*(b*rowSize + a)+1 ] = 255;
+
+                                altpix[4*(b*rowSize + a)+2 ] += 0;
+
+                                altpix[4*(b*rowSize + a)+3 ] = 255;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+
+        console.log(maxCounter);
+
+        ctx.putImageData(altImg,0,height + 5);
+        //ctx.putImageData(altImg,0,0);
+    };
+
+
+    function OneDHaarTransform(HaarMatrix) 
+    {
+        var sum = 0;
+        var diff = 0;
+        var hMLen = HaarMatrix.length/2;
+        var tempHaar = [];
+        //It only recurses on first half of the array
+        for (var i = 0; i < hMLen; i++) 
+        {
+                sum = HaarMatrix[2*i] + HaarMatrix[2*i + 1];
+                sum = sum / Math.sqrt(2);
+                diff = HaarMatrix[2*i] - HaarMatrix[2*i + 1];
+                diff = diff / Math.sqrt(2);
+                tempHaar[i] = sum;
+                tempHaar[i + hMLen] = diff
+        };
+        for (var i = 0; i < HaarMatrix.length; i++) {
+            HaarMatrix[i] = tempHaar[i];
+        };
+    };
+
+    function HaarTransform(img, imgd, MaxStepHaar) 
+    {
+
+        altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+        var altpix = altImg.data;
+
+        var pix = imgd.data;
+        var rowSize = ctx.viewportWidth;
+        var colSize = ctx.viewportHeight;
+
+        var width = img.width;
+        var height = img.height;
+        var currWidth = img.width;
+        var currHeight = img.height;
+        var Haar = [];
+        var tempHaar = [];
+
+        //Initialize the Haar matrix
+        for (var row = 0; row < img.height; row++) 
+        {
+            Haar[row] = [];
+            for (var col = 0; col < img.width; col++) {
+                Haar[row][col] = [];
+                for (var i = 0; i < 4; i++) {
+                     Haar[row][col][i] = pix[4*(row*img.width + col + i)];
+                };
+            };
+        };
+
+        //Do a Haar Wavelet Transform
+        while( (currWidth > 1 || currHeight > 1) && (MaxStepHaar > 1) ) 
+        {
+            MaxStepHaar = MaxStepHaar - 1;
+
+            //Do it for each row first
+            if (currWidth > 1) 
+            {
+                for(var row = 0; row < currHeight; row++)
+                {
+                    for (var i = 0; i < 3; i++) {
+                        for(col = 0; col < currWidth; col++) {
+                            tempHaar[col] = Haar[row][col][i];
+                        };
+
+                        OneDHaarTransform(tempHaar);
+                        
+                        for(col = 0; col < currWidth; col++) {
+                            Haar[row][col][i] = tempHaar[col];
+                        };
+                    };
+                };
+            };
+            //Then perform Haar transform on each column
+            tempHaar = [];
+            if (currHeight > 1) 
+            {
+                for(var col = 0; col < currWidth; col++)
+                {
+                    for (var i = 0; i < 3; i++) {
+                        for(row = 0; row < currHeight; row++) {
+                            tempHaar[row] = Haar[row][col][i];
+                        };
+
+                        OneDHaarTransform(tempHaar);
+                        
+                        for(row = 0; row < currHeight; row++) {
+                            Haar[row][col][i] = tempHaar[row];
+                        };
+                    };
+                };
+            };
+            tempHaar = [];
+
+            if (currHeight > 1) {currHeight  = currHeight/2};
+            if (currWidth > 1)  {currWidth = currWidth/2};
+        };
+
+        //Copy pix data to canvas
+        for (var row = 0; row < img.height; row++) {
+            for (var col = 0; col < img.width; col++) {
+                altpix[4*(row*rowSize + col) ] = Haar[row][col][0];
+                altpix[4*(row*rowSize + col)+1 ] = Haar[row][col][1];
+
+                altpix[4*(row*rowSize + col)+2 ] =  Haar[row][col][2];
+
+                altpix[4*(row*rowSize + col)+3 ] =  255;
+            };
+        };
+        ctx.putImageData(imgd,0,0);
+        ctx.putImageData(altImg,0,height + 5);
+    };
+
+
+    function Reset() {
+        var canvas0 = document.getElementById("canvas0");
+        var canvas1 = document.getElementById("canvas1");
+        ctx0 = canvas0.getContext("2d");
+        imgd = ctx0.getImageData(0,0,canvas0.width,canvas0.height);
+        initGL(canvas1);
+        ctx.putImageData(imgd,0,0);
+        //console.log("I'm reseting");
+    };
+
+
+    function showValue(newValue)
+    {
+        document.getElementById("range").innerHTML = newValue;
+        var canvas0 = document.getElementById("canvas0");
+        var canvas1 = document.getElementById("canvas1");
+        var ctx0 = canvas0.getContext("2d");
+        imgd = ctx0.getImageData(0,0,canvas0.width,canvas0.height);
+        ctx = canvas1.getContext("2d");
+        houghTransform(img, imgd, newValue);
+    };
+
+    function MaxStepHaar(newValue)
+    {
+        document.getElementById("HaarStep").innerHTML = newValue;
+        var canvas2 = document.getElementById("canvas2");
+        var canvas3 = document.getElementById("canvas3");
+        var ctx2 = canvas2.getContext("2d");
+        var img2 = new Image();
+        img2.width = canvas2.width;
+        img2.height = canvas2.height;
+        imgd = ctx2.getImageData(0,0,canvas2.width,canvas2.height);
+        ctx = canvas3.getContext("2d");
+        initGL(canvas3);
+        HaarTransform(img2, imgd, newValue);
+    };
+
+    function webGLStart() {
+        var canvas0 = document.getElementById("canvas0");
+        var canvas1 = document.getElementById("canvas1");
+        var canvas2 = document.getElementById("canvas2");
+        var canvas3 = document.getElementById("canvas3");
+        img = new Image();
+        img.src = "img_hough_circle.png";
+        var imgd;
+        img.onload = function() {
+            initGL(canvas0);
+            canvas0.width = img.width;
+            canvas0.height = img.height;
+            drawScene(img);
+            imgd = ctx.getImageData(0,0,canvas0.width,canvas0.height);
+            initGL(canvas1);
+            ctx.putImageData(imgd,0,0);
+            var thresh = 6;
+            houghTransform(img, imgd, thresh);
+        };
+        var img2 = new Image();
+        img2.src = "img_lena.png";
+        img2.onload = function() {
+            initGL(canvas2);
+            canvas2.width = img2.width;
+            canvas2.height = img2.height;
+            drawScene(img2);
+            imgd = ctx.getImageData(0,0,canvas2.width,canvas2.height);
+            initGL(canvas3);
+            ctx.putImageData(imgd,0,0);
+            HaarTransform(img2,imgd, 3);
+        };
+    };
+</script>
+
+
+</head>
+
+
+<body onload="webGLStart();">
+    <p>Image to Use for Hough Transform:</p>
+
+    <canvas id="canvas0" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+    <p>Threshold for finding circles, with the hough transform in purple and green circles representing circles found at that threshold.</p>
+
+    <input style="padding-left=100px" type="range" min="1" max="50" value="6" step="1" onchange="showValue(this.value)" />
+    <span id="range">6</span>
+    <button onclick="Reset()">Back to Original</button>
+    <canvas id="canvas1" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+    <button onclick="onOff0()">Show relevant JS code</button>
+    <script type="text/javascript">
+        function onOff0() {
+        var onOff = document.getElementById("item0").style.display;
+        if (onOff == "none") {
+            document.getElementById("item0").style.display="block";
+        } else{
+            document.getElementById("item0").style.display="none";
+        };
+        };
+    </script>
+    <pre id="item0" style="display:none;">
+        Javascript Code:
+        <code>
+        // This builds a table that will give all possible centers that can 
+        // come from this particular point on the circle. Better thing is to use gradients
+        // for orientation.
+        function buildLookUpTable(radiusMin, radiusMax) 
+        {
+            var i = 0;
+            var incDen = 4 * radiusMin;
+            var radiusInc = 1;
+            var lut = [[[]],[[]]];
+
+            for (var i = 0; i &lt; radiusMax; i++) 
+            {
+                lut[0][i] = [];
+                lut[1][i] = []; 
+            };
+
+            for (var tempRadius = radiusMin; tempRadius &lt;= radiusMax; tempRadius++) 
+            {
+                i = 0;
+                for (var row = 0; row &lt; tempRadius; row++) 
+                {
+                    for (var col = 0; col &lt; tempRadius; col++) 
+                    {
+                        var dist = Math.sqrt(row*row + col*col);
+                        var indexR = tempRadius - radiusMin; 
+                        if ((dist &lt;= (tempRadius + 0.5)) &amp;&amp; (dist >= (tempRadius - 0.5) ) ) 
+                        {
+                            lut[0][indexR][i] = col;
+                            lut[1][indexR][i] = row;
+                            i++;
+                        };
+                    };
+                };
+            };        
+
+            return lut;
+        };
+
+        function houghTransform(img, imgd, thresh) 
+        {
+
+            altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+            var altpix = altImg.data;
+            var pix = imgd.data;
+            var rowSize = ctx.viewportWidth;
+            var colSize = ctx.viewportHeight;
+
+            for (var row = 1; row &lt; img.height - 1; row++) 
+            {
+                for (var col = 1; col &lt; img.width - 1; col++) 
+                {
+                    altpix[4*(row*rowSize + col) ] = 0;
+                    altpix[4*(row*rowSize + col)+1 ] = 0;
+
+                    altpix[4*(row*rowSize + col)+2 ] = 0;
+
+                    altpix[4*(row*rowSize + col)+3 ] = 255;
+                };
+            };
+
+            var height = img.height;
+            var width = img.width;
+            var radiusMin = 1;
+            var radiusMax = 50;
+
+            var lut = buildLookUpTable(radiusMin, radiusMax);
+
+            var houghValues =  [[[]]];
+
+            for (var i = 0; i &lt;= img.width; i++) 
+            {
+                houghValues[i] = [];
+                for (var j = 0; j &lt;= height; j++) 
+                {
+                    houghValues[i][j] = [];
+                    for (var k = 0; k &lt; radiusMax + 1; k++) 
+                    {
+                        houghValues[i][j][k] = 0;
+                    };
+                };
+            };
+
+            //Hough Transform
+            for (var row = 1; row &lt; img.height - 1; row++) 
+            {
+                for (var col = 1; col &lt; img.width - 1; col++) 
+                {
+
+                    for (var tempRadius = radiusMin; tempRadius &lt;= radiusMax; tempRadius++) 
+                    {
+                        // Binary image and image is a 1-D array so we need to skip by 4.
+                        if (pix[4*((row)*img.width+(col))] > 1) 
+                        {
+                            var indexR = (tempRadius - radiusMin);
+                            // Let's add to the counter to every possible center or could be.
+                            for (var i = 0; i &lt; lut[0][indexR].length; i++) 
+                            {
+                                var a = col + lut[1][indexR][i];
+                                var b = row + lut[0][indexR][i];
+                                if((b >= 0) &amp;&amp; (b &lt; height) &amp;&amp; (a >= 0) &amp;&amp; (a &lt; width)) 
+                                {
+                                    houghValues[a][b][indexR-1] = houghValues[a][b][indexR-1] + 1;
+                                    altpix[4*(b*rowSize + a) ] += 1;
+                                    altpix[4*(b*rowSize + a)+1 ] += 0;
+
+                                    altpix[4*(b*rowSize + a)+2 ] += 1;
+
+                                    altpix[4*(b*rowSize + a)+3 ] = 255;
+                                }
+                            };
+                        };
+                    };
+                };
+            };
+
+            //find the max radius
+            var maxCounter = 0;
+            var maxRs = [];
+
+            for (var k = 0; k &lt; radiusMax + 1; k++ ) 
+            {
+                for (var j = 0; j &lt; img.height; j++) 
+                {
+                    for (var i = 0; i &lt; img.width; i++) 
+                    {
+                        if (houghValues[i][j][k] > maxCounter) 
+                        {
+                            maxCounter = houghValues[i][j][k];
+                        };
+                    };
+                };
+            };
+
+            for (var k = 0; k &lt; radiusMax + 1; k++ ) 
+            {
+                for (var j = 0; j &lt; img.height; j++) 
+                {
+                    for (var i = 0; i &lt; img.width; i++) 
+                    {
+                        if (houghValues[i][j][k] >= maxCounter-thresh) 
+                        {
+                            for (var row = -k; row &lt; k; row++) 
+                            {
+                                for (var col = -k; col &lt; k; col++) 
+                                {
+                                    var dist = Math.sqrt(row*row + col*col);
+                                    var b = j + row;
+                                    var a = i + col;
+                                    if ((dist &lt;= (k + 1)) &amp;&amp; (dist >= (k - 1) ) ) 
+                                    {
+                                    altpix[4*(b*rowSize + a) ] += 0;
+                                    altpix[4*(b*rowSize + a)+1 ] = 255;
+
+                                    altpix[4*(b*rowSize + a)+2 ] += 0;
+
+                                    altpix[4*(b*rowSize + a)+3 ] = 255;
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+
+
+            console.log(maxCounter);
+
+            ctx.putImageData(altImg,0,height + 5);
+        };
+        </code>
+    </pre>
+
+    <p>Image to use for Haar Wavelet Transform</p>
+    <canvas id="canvas2" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+    <p>Can change how many times the Haar function recurses (as opposed to recursing until completion).</p>
+    <input style="padding-left=100px" type="range" min="1" max="50" value="3" step="1" onchange="MaxStepHaar(this.value)" />
+    <span id="HaarStep">3</span>
+
+    <canvas id="canvas3" style="border: 1px solid #000000; margin-left: auto; margin-right: auto; display: block;" width="500" height="500"></canvas>
+
+    <button onclick="onOff1()">Show relevant JS code</button>
+    <script type="text/javascript">
+        function onOff1() {
+        var onOff = document.getElementById("item1").style.display;
+        if (onOff == "none") {
+            document.getElementById("item1").style.display="block";
+        } else{
+            document.getElementById("item1").style.display="none";
+        };
+        };
+    </script>
+    <pre id="item1" style="display:none;">
+        Javascript Code:
+        <code>
+        function OneDHaarTransform(HaarMatrix) 
+        {
+            var sum = 0;
+            var diff = 0;
+            var hMLen = HaarMatrix.length/2;
+            var tempHaar = [];
+            //It only recurses on first half of the array
+            for (var i = 0; i &lt; hMLen; i++) 
+            {
+                    sum = HaarMatrix[2*i] + HaarMatrix[2*i + 1];
+                    sum = sum / Math.sqrt(2);
+                    diff = HaarMatrix[2*i] - HaarMatrix[2*i + 1];
+                    diff = diff / Math.sqrt(2);
+                    tempHaar[i] = sum;
+                    tempHaar[i + hMLen] = diff
+            };
+            for (var i = 0; i &lt; HaarMatrix.length; i++) {
+                HaarMatrix[i] = tempHaar[i];
+            };
+
+        };
+
+        function HaarTransform(img, imgd, MaxStepHaar) 
+        {
+
+            altImg = ctx.getImageData(0,0,ctx.viewportWidth,ctx.viewportHeight);
+            var altpix = altImg.data;
+
+            var pix = imgd.data;
+            var rowSize = ctx.viewportWidth;
+            var colSize = ctx.viewportHeight;
+
+            var width = img.width;
+            var height = img.height;
+            var currWidth = img.width;
+            var currHeight = img.height;
+            var Haar = [];
+            var tempHaar = [];
+
+            //Initialize the Haar matrix
+            for (var row = 0; row &lt; img.height; row++) 
+            {
+                Haar[row] = [];
+                for (var col = 0; col &lt; img.width; col++) {
+                    Haar[row][col] = [];
+                    for (var i = 0; i &lt; 3; i++) {
+                         Haar[row][col][i] = pix[4*(row*img.width + col + i)];
+                    };
+                };
+            };
+
+            //Do a Haar Wavelet Transform
+            while( (currWidth > 1 || currHeight > 1) &amp;&amp; (MaxStepHaar > 1) ) 
+            {
+                MaxStepHaar = MaxStepHaar - 1;
+
+                //Do it for each row first
+                if (currWidth > 1) 
+                {
+                    for(var row = 0; row &lt; currHeight; row++)
+                    {
+                        for (var i = 0; i &lt; 3; i++) {
+                            for(col = 0; col &lt; currWidth; col++) {
+                                tempHaar[col] = Haar[row][col][i];
+                            };
+
+                            OneDHaarTransform(tempHaar);
+                            
+                            for(col = 0; col &lt; currWidth; col++) {
+                                Haar[row][col][i] = tempHaar[col];
+                            };
+                        };
+                    };
+                };
+                //Then perform Haar transform on each column
+                tempHaar = [];
+                if (currHeight > 1) 
+                {
+                    for(var col = 0; col &lt; currWidth; col++)
+                    {
+                        for (var i = 0; i &lt; 3; i++) {
+                            for(row = 0; row &lt; currHeight; row++) {
+                                tempHaar[row] = Haar[row][col][i];
+                            };
+
+                            OneDHaarTransform(tempHaar);
+                            
+                            for(row = 0; row &lt; currHeight; row++) {
+                                Haar[row][col][i] = tempHaar[row];
+                            };
+                        };
+                    };
+                };
+                tempHaar = [];
+
+                if (currHeight > 1) {currHeight  = currHeight/2};
+                if (currWidth > 1)  {currWidth = currWidth/2};
+            };
+
+            //Copy pix data to canvas
+            for (var row = 0; row &lt; img.height; row++) {
+                for (var col = 0; col &lt; img.width; col++) {
+                    altpix[4*(row*rowSize + col) ] = Haar[row][col][0];
+                    altpix[4*(row*rowSize + col)+1 ] = Haar[row][col][1];
+
+                    altpix[4*(row*rowSize + col)+2 ] =  Haar[row][col][2];
+
+                    altpix[4*(row*rowSize + col)+3 ] =  255;
+                };
+            };
+            ctx.putImageData(altImg,0,0);
+        };
+        </code>
+    </pre>
+
+    <br/>
+    <p></p>
+    <a href="http://xksteven.com/">&lt;&lt; Back to other examples</a><br />
+</body>
+
+</html>
