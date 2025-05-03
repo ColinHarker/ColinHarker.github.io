@@ -1,0 +1,25 @@
+Placeholder Information for Mulligan Masters Website Video
+
+This directory should contain the video background for the home page:
+
+Recommended Video Specifications:
+- Filename: background-video.mp4
+- Resolution: 1920x1080 (Full HD) or higher
+- Duration: 30-60 seconds (looping)
+- Format: MP4 with H.264 encoding
+- Size: Optimized for web (ideally under 10MB)
+- Content: Slow-motion golf scenes, beautiful golf course views, etc.
+
+Additional Recommendations:
+- Include a compressed/lower quality version for mobile devices
+- Consider adding a WebM version for better browser compatibility
+- Ensure the video has no audio or has audio disabled in the HTML
+
+When implementing the site with real content, replace the video placeholder reference in index.html with the actual video file.
+
+Example implementation in index.html:
+```html
+<video autoplay muted loop playsinline>
+  <source src="assets/videos/background-video.mp4" type="video/mp4">
+  <source src="assets/videos/background-video.webm" type="video/webm">
+</video>

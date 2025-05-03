@@ -1,0 +1,19 @@
+Placeholder Information for Mulligan Masters Website
+
+This directory should contain the following images for the website:
+
+1. golf-course-placeholder.jpg - Background image for the home page
+2. gallery-placeholder.jpg - Placeholder for gallery images
+3. member-photos/ - Directory for member profile photos
+4. event-photos/ - Directory for event photos
+5. logo.png - Mulligan Masters logo (if available)
+
+When implementing the site with real content, replace these placeholder references with actual images.
+
+Image Guidelines:
+- Home page background: 1920x1080px or larger, landscape orientation
+- Gallery images: 800x600px minimum, consistent aspect ratio recommended
+- Member photos: 400x400px, square aspect ratio, consistent style
+- Event photos: 800x600px minimum, landscape orientation preferred
+
+All images should be optimized for web to ensure fast loading times.

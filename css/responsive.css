@@ -1,0 +1,123 @@
+/* 
+   Mulligan Masters Golf Group Website
+   Responsive Stylesheet
+*/
+
+/* Extra Small Devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero .lead {
+        font-size: 1.2rem;
+    }
+    
+    .hero-buttons .btn {
+        margin: 5px;
+        display: block;
+        width: 100%;
+    }
+    
+    .feature-card {
+        margin-bottom: 20px;
+    }
+    
+    .events-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .gallery-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .timeline::before {
+        left: 30px;
+    }
+    
+    .roster-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .events-tabs {
+        flex-direction: column;
+    }
+    
+    .events-tab {
+        width: 100%;
+        border-radius: 0 !important;
+        margin-bottom: 5px;
+    }
+    
+    .social-links {
+        justify-content: center;
+        margin-top: 20px;
+    }
+    
+    .footer [class*="col-"] {
+        text-align: center !important;
+    }
+}
+
+/* Small Devices (tablets, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .hero h1 {
+        font-size: 3rem;
+    }
+    
+    .events-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .gallery-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .roster-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .timeline::before {
+        left: 50px;
+    }
+}
+
+/* Medium Devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .events-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .gallery-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .roster-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Large Devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .navbar-expand-lg .navbar-nav .nav-link {
+        padding-right: 1.5rem;
+        padding-left: 1.5rem;
+    }
+}
+
+/* Fix for fixed navbar on mobile */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background-color: var(--primary-color);
+        padding: 15px;
+        border-radius: 0 0 10px 10px;
+    }
+    
+    .navbar-dark .navbar-toggler {
+        border-color: transparent;
+    }
+    
+    .navbar-dark .navbar-toggler:focus {
+        box-shadow: none;
+    }
+}
