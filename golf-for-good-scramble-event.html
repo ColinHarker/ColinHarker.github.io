@@ -247,14 +247,22 @@
         }
         
         #event-countdown {
+            display: flex;
+            justify-content: center;
             gap: 1.5rem;
+            flex-wrap: nowrap;
         }
         
         .countdown-item {
             background-color: var(--bg-light);
             border-radius: var(--radius-sm);
-            padding: 1rem 1.5rem;
-            min-width: 80px;
+            padding: 1rem;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
             box-shadow: var(--shadow-sm);
             border: 2px solid var(--accent-color);
@@ -266,6 +274,8 @@
             color: var(--primary-dark);
             line-height: 1;
             margin-bottom: 0.5rem;
+            width: 100%;
+            text-align: center;
         }
         
         .countdown-label {
@@ -273,6 +283,8 @@
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1px;
+            width: 100%;
+            text-align: center;
         }
         
         /* Countdown animation */
@@ -360,6 +372,37 @@
                 font-size: 1.5rem;
             }
             
+            /* Countdown timer mobile adjustments */
+            #event-countdown {
+                flex-wrap: wrap;
+                gap: 0.75rem !important;
+                justify-content: center;
+            }
+            
+            .countdown-item {
+                width: calc(50% - 0.75rem);
+                height: auto;
+                aspect-ratio: 1/1;
+                padding: 0.5rem;
+                min-width: unset;
+                max-width: unset;
+                flex: 0 0 calc(50% - 0.75rem);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            
+            .countdown-value {
+                font-size: 1.75rem;
+                margin-bottom: 0.25rem;
+                display: block;
+            }
+            
+            .countdown-label {
+                font-size: 0.7rem;
+                display: block;
+            }
+            
             /* Adjust two-column layouts to stack on mobile */
             .row .col-md-6, .row .col-md-4, .row .col-md-8, .row .col-lg-6 {
                 margin-bottom: 1.5rem;
@@ -402,6 +445,21 @@
             
             .event-detail-list li {
                 padding-left: 2rem;
+            }
+            
+            /* Further adjustments for very small screens */
+            #event-countdown {
+                gap: 0.5rem !important;
+            }
+            
+            .countdown-item {
+                width: calc(50% - 0.5rem);
+                flex: 0 0 calc(50% - 0.5rem);
+                padding: 0.5rem;
+            }
+            
+            .countdown-value {
+                font-size: 1.5rem;
             }
         }
     </style>
