@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mulligan Masters | Golf Courses</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="description" content="Explore the golf courses frequented by Mulligan Masters of the Bay - from local favorites to bucket list destinations across Northern California.">
+    
+    <!-- Open Graph / Facebook / iOS Message Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://colinharker.github.io/courses.html">
+    <meta property="og:title" content="Mulligan Masters | Golf Courses">
+    <meta property="og:description" content="Discover the beautiful and challenging golf courses played by the Mulligan Masters group in Northern California, from local favorites to bucket list destinations.">
+    <meta property="og:image" content="https://colinharker.github.io/assets/images/Northwood-Landscapes--WEB-5.jpeg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://colinharker.github.io/courses.html">
+    <meta property="twitter:title" content="Mulligan Masters | Golf Courses">
+    <meta property="twitter:description" content="Discover the beautiful and challenging golf courses played by the Mulligan Masters group in Northern California, from local favorites to bucket list destinations.">
+    <meta property="twitter:image" content="https://colinharker.github.io/assets/images/Northwood-Landscapes--WEB-5.jpeg">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/Mulligan Masters recreate Golf Logo_011425.png" type="image/png">
+    
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .course-section {
+            padding: 5rem 0;
+        }
+        
+        .course-section:nth-child(even) {
+            background-color: var(--light-color);
+        }
+        
+        .course-card {
+            background-color: var(--white-color);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .course-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .course-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        }
+        
+        .course-info {
+            padding: 1.5rem;
+        }
+        
+        .course-name {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .course-location {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .course-location i {
+            margin-right: 5px;
+        }
+        
+        .course-description {
+            margin-bottom: 1.5rem;
+        }
+        
+        .course-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .course-link:hover {
+            color: var(--secondary-color);
+        }
+        
+        .course-link i {
+            margin-right: 8px;
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+        
+        .section-title.text-center::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .bucket-list-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+     <!-- Navigation -->
+   <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Mulligan Masters</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="roster.html">Roster</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="events.html">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="gallery.html">Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="hole-in-one.html">Hole in One</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="courses.html">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="faqs.html">FAQs</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container text-center">
+            <h1 data-aos="fade-up">Our Golf Courses</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Courses Frequented Section -->
+        <section class="course-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center mb-5" data-aos="fade-up">
+                        <h2 class="section-title text-center">Courses Frequented</h2>
+                        <p class="lead">We're lucky to call Northern California home, where world-class golf is always just a short drive away. The Mulligan Masters rotate through a mix of challenging, scenic, and well-loved tracks that offer something unique every round. Here's a look at some of the staple courses that make up the core of our circuit:</p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <!-- Cinnabar Hills Golf Club -->
+                    <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up">
+                        <div class="course-card">
+                            <div class="course-image" style="background-image: url('assets/images/courses/cinnebar-lake5-825.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">Cinnabar Hills Golf Club</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> San Jose, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>Cinnabar Hills blends dramatic elevation changes with panoramic views of the Silicon Valley foothills. With three nine-hole combinations—Canyon, Lake, and Mountain—it offers variety and strategy in every loop. The layout rewards smart play and creativity, while the quiet, natural setting makes it a favorite for both competitive rounds and casual hangs.</p>
+                                </div>
+                                <a href="https://www.cinnabarhills.com/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit Cinnabar Hills Golf Club
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Half Moon Bay Golf Links -->
+                    <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="course-card">
+                            <div class="course-image" style="background-image: url('assets/images/courses/halfmoonbay.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">Half Moon Bay Golf Links</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> Half Moon Bay, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>Few experiences rival a round on the Ocean Course at Half Moon Bay. Perched on the bluffs overlooking the Pacific, it's our go-to for when we want to mix serious golf with serious views. The coastal winds, fast greens, and iconic closing hole along the cliff make every round here unforgettable.</p>
+                                </div>
+                                <a href="https://www.halfmoonbaygolf.com/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit Half Moon Bay Golf Links
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Presidio Golf Course -->
+                    <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="course-card">
+                            <div class="course-image" style="background-image: url('assets/images/courses/presidio21.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">Presidio Golf Course</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> San Francisco, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>Nestled within the historic Presidio National Park, this tree-lined track delivers old-school charm with tight fairways and small, quick greens. It demands accuracy and rewards shot-makers, especially under the fog. Playing here always feels like a step back in time—right in the heart of the city.</p>
+                                </div>
+                                <a href="https://www.presidiogolf.com/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit Presidio Golf Course
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Baylands Golf Links -->
+                    <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                        <div class="course-card">
+                            <div class="course-image" style="background-image: url('assets/images/courses/baylands.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">Baylands Golf Links</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> Palo Alto, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>One of the more accessible and modern courses we frequent, Baylands offers wide fairways, firm conditions, and a fun links-style layout. The views of the Baylands preserve and ever-present breeze add subtle challenge. It's a solid choice for a relaxed round with just enough bite to keep things interesting.</p>
+                                </div>
+                                <a href="https://www.cityofpaloalto.org/Departments/Community-Services/Golf-Course" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit Baylands Golf Links
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Wente Vineyards Golf Course -->
+                    <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+                        <div class="course-card">
+                            <div class="course-image" style="background-image: url('assets/images/courses/The-Course-at-Wente-Vineyards-Hole-7-8-9-VIEW-2.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">Wente Vineyards Golf Course</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> Livermore, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>A hidden gem in wine country, Wente is known for its dramatic elevation shifts, vineyard-lined fairways, and pristine conditions. It's as scenic as it is tough, with narrow tee shots, undulating greens, and postcard-worthy views from almost every hole. This is a top pick when we want a high-quality track with a getaway feel.</p>
+                                </div>
+                                <a href="https://www.wentegolf.com/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit Wente Vineyards Golf Course
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- TPC Harding Park -->
+                    <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="500">
+                        <div class="course-card">
+                            <div class="course-image" style="background-image: url('assets/images/courses/tpcharding.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">TPC Harding Park</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> San Francisco, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>A former PGA Championship host, Harding Park brings championship pedigree to our lineup. Wide fairways, towering cypress trees, and a strategic layout make it playable but challenging. It's a favorite when we want to walk the same fairways as the pros and soak in a big-stage golf experience right in our backyard.</p>
+                                </div>
+                                <a href="https://tpc.com/hardingpark/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit TPC Harding Park
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Specialty Courses Section -->
+        <section class="course-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center mb-5" data-aos="fade-up">
+                        <h2 class="section-title text-center">Specialty Courses</h2>
+                        <p class="lead">Beyond our regular rotation, the Mulligan Masters occasionally take things up a notch with rounds at some of California's most iconic and exclusive destinations. These specialty courses offer unforgettable experiences—whether it's championship pedigree, coastal beauty, or private club prestige. Here's a look at the gems we've been fortunate to tee it up on:</p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <!-- Poppy Hills Golf Course -->
+                    <div class="col-lg-6 mb-4" data-aos="fade-up">
+                        <div class="course-card">
+                            <div class="course-image" style="background-image: url('assets/images/courses/Poppy Hills.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">Poppy Hills Golf Course</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> Monterey, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>Tucked within the famed Del Monte Forest of Pebble Beach, Poppy Hills is a true modern classic. Redesigned by Robert Trent Jones II, the course seamlessly blends into its natural surroundings with firm, fast fairways and dramatic elevation changes. It's a favorite among purists for its strategic layout and minimalist aesthetic—no houses, just trees, sand, and the occasional deer.</p>
+                                    <p>As the home course of the NCGA, it offers tournament-level quality with a laid-back vibe, and it's become a Mulligan Masters must-play for our larger group outings.</p>
+                                </div>
+                                <a href="https://poppyhillsgolf.com/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit Poppy Hills Golf Course
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Del Monte Golf Course -->
+                    <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="course-card">
+                            <div class="course-image" style="background-image: url('assets/images/courses/delmonte-golf-hole6-1000x600.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">Del Monte Golf Course</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> Monterey, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>Del Monte is the oldest operating course west of the Mississippi, and it wears that legacy proudly. Opened in 1897, this course combines classic design with Monterey charm—tight fairways, small greens, and a tree-lined layout that demands precision. Don't let the shorter yardage fool you: Del Monte rewards smart play and can quickly punish anything off-line.</p>
+                                    <p>With a rich history and unbeatable value in the heart of Monterey, it's a perfect throwback track that adds character to any Mulligan Masters weekend.</p>
+                                </div>
+                                <a href="https://www.pebblebeach.com/golf/del-monte-golf-course/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit Del Monte Golf Course
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- The Links at Spanish Bay -->
+                    <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="course-card">
+                            <div class="course-image" style="background-image: url('assets/images/courses/spanishbay.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">The Links at Spanish Bay</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> Pebble Beach, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>Playing Spanish Bay feels like golfing on the edge of the world. Designed by Robert Trent Jones Jr., Tom Watson, and Sandy Tatum, this coastal links-style course delivers stunning ocean views, rolling dunes, and the constant hum of the Pacific. The wind is always a factor, and bump-and-run creativity is encouraged over aerial heroics.</p>
+                                    <p>A bagpiper plays at sunset, the sunsets are legendary, and every round feels like a special occasion. Spanish Bay is our go-to when we want a taste of true Scottish-style golf without leaving California.</p>
+                                </div>
+                                <a href="https://www.pebblebeach.com/golf/the-links-at-spanish-bay/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit The Links at Spanish Bay
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- The Lake Course at The Olympic Club -->
+                    <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                        <div class="course-card">
+                            <div class="course-image" style="background-image: url('assets/images/courses/Olympic-Lake18_DSC05143-.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">The Lake Course at The Olympic Club</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> San Francisco, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>A true bucket-list round, the Lake Course at The Olympic Club is as prestigious as it gets. Host to five U.S. Opens (and counting), this historic private course is carved into the hillside above Lake Merced. It's tight, tree-lined, and relentlessly tough, with tilted fairways and crowned greens that reward precision and punish mistakes.</p>
+                                    <p>Access is limited and the tradition runs deep—when a Mulligan Master gets the invite, it's a special day for the whole crew. Playing here isn't just golf; it's joining a legacy.</p>
+                                </div>
+                                <a href="https://www.olyclub.com/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit The Olympic Club (access by member invitation only)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Bucket List Courses Section -->
+        <section class="course-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center mb-5" data-aos="fade-up">
+                        <h2 class="section-title text-center">Bucket List Courses</h2>
+                        <p class="lead">Every golfer has a list—that short, sacred roster of courses that live in our imaginations long before we ever set foot on the first tee. For the Mulligan Masters, these are the Nor Cal courses that combine prestige, design, and pure golfing magic. Whether we've played them once or are still dreaming of our first loop, these are the rounds we talk about around the 19th hole, text about late at night, and plan future trips around.</p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <!-- Pebble Beach Golf Links -->
+                    <div class="col-lg-6 mb-4" data-aos="fade-up">
+                        <div class="course-card">
+                            <div class="bucket-list-badge">Bucket List</div>
+                            <div class="course-image" style="background-image: url('assets/images/courses/pebblebeach.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">Pebble Beach Golf Links</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> Pebble Beach, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>The crown jewel of American public golf. Pebble Beach is as iconic as it gets—home to multiple U.S. Opens, host to legends, and a course that's etched into golf history. With cliffside holes like the 7th and 18th, every swing feels like it belongs in a highlight reel. It's expensive. It's bucket-list for a reason. And when a Mulligan Master finally makes the walk down that famous finishing hole, it's a memory for life.</p>
+                                </div>
+                                <a href="https://www.pebblebeach.com/golf/pebble-beach-golf-links/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit Pebble Beach
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Spyglass Hill Golf Course -->
+                    <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="course-card">
+                            <div class="bucket-list-badge">Bucket List</div>
+                            <div class="course-image" style="background-image: url('assets/images/courses/spyglass.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">Spyglass Hill Golf Course</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> Pebble Beach, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>Often overshadowed by its famous neighbor, Spyglass Hill might be the better pure golf course. The opening five holes weave through seaside dunes, then the course dives into dense forest, offering a one-two punch of beauty and brutality. It's tight, it's tough, and it's built for serious players. Playing here tests every club in the bag—and earns immediate bragging rights.</p>
+                                </div>
+                                <a href="https://www.pebblebeach.com/golf/spyglass-hill-golf-course/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit Spyglass Hill
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pasatiempo Golf Club -->
+                    <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="course-card">
+                            <div class="bucket-list-badge">Bucket List</div>
+                            <div class="course-image" style="background-image: url('assets/images/courses/pasatiempo.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">Pasatiempo Golf Club</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> Santa Cruz, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>Designed by the legendary Alister MacKenzie (the same mind behind Augusta National), Pasatiempo is a masterpiece of routing, strategy, and architectural brilliance. Elevated tees, dramatic bunkering, and slick, contoured greens make it a thinking golfer's dream. It's a course that gets better the more you play it—and one that leaves first-timers in awe. For many Mulligan Masters, this is the thinking man's bucket-list round.</p>
+                                </div>
+                                <a href="https://www.pasatiempo.com/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit Pasatiempo Golf Club
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Yocha Dehe Golf Club -->
+                    <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                        <div class="course-card">
+                            <div class="bucket-list-badge">Bucket List</div>
+                            <div class="course-image" style="background-image: url('assets/images/courses/Yocha-Dehe.jpg');"></div>
+                            <div class="course-info">
+                                <h3 class="course-name">Yocha Dehe Golf Club</h3>
+                                <div class="course-location">
+                                    <i class="fas fa-map-marker-alt"></i> Brooks, CA
+                                </div>
+                                <div class="course-description">
+                                    <p>Located just outside of Sacramento at the base of the Capay Valley, Yocha Dehe is a hidden gem that punches way above its weight. Impeccable conditions, a creative layout, and vineyard-lined fairways make it one of the best resort courses in California. It's playable but challenging, peaceful yet dramatic—and has become a top target for a future Mulligan Masters weekend getaway.</p>
+                                </div>
+                                <a href="https://www.yochadehegolfclub.com/" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit Yocha Dehe Golf Club
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Mulligan Masters</h3>
+                    <p>Where passion for golf meets camaraderie</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <ul class="social-links">
+                        <li><a href="https://www.instagram.com/mulligansmasters/"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                    <p class="mt-2">
+                        <a href="mailto:mulliganmastersofthebay@gmail.com">mulliganmastersofthebay@gmail.com</a>
+                    </p>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 text-center">
+                    <p class="mb-0">&copy; <span id="current-year"></span> Mulligan Masters. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
