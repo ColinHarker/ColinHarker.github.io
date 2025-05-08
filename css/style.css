@@ -114,6 +114,12 @@ a:hover {
     overflow: hidden;
 }
 
+.video-background video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .video-placeholder {
     width: 100%;
     height: 100%;
@@ -157,6 +163,34 @@ a:hover {
 
 .hero-buttons .btn {
     margin: 0 10px;
+}
+
+.scroll-indicator {
+    margin-top: 2rem;
+    color: var(--white-color);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.scroll-indicator p {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.scroll-indicator i {
+    font-size: 1.5rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
 }
 
 /* Welcome Section */
@@ -303,7 +337,7 @@ a:hover {
 
 /* About Page */
 .page-header {
-    height: 50vh;
+    height: 60vh;
     background-color: var(--primary-color);
     color: var(--white-color);
     display: flex;
@@ -311,11 +345,38 @@ a:hover {
     justify-content: center;
     text-align: center;
     position: relative;
+    overflow: hidden;
+}
+
+.page-header .video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.page-header .container {
+    position: relative;
+    z-index: 1;
+}
+
+.page-header .video-background video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.page-header .overlay {
+    background-color: rgba(12, 53, 35, 0.5);
 }
 
 .page-header h1 {
     font-size: 3rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
 }
 
 .about-section {
@@ -494,6 +555,19 @@ a:hover {
 }
 
 /* Gallery Page */
+main {
+    position: relative;
+    z-index: 2;
+    margin-top: -50px;
+}
+
+main .gallery-section {
+    background-color: var(--white-color);
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+    padding-top: 3rem;
+}
+
 .gallery-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
