@@ -348,7 +348,28 @@ a:hover {
     overflow: hidden;
 }
 
-.page-header .video-background {
+/* Compact Header - Smaller version of page-header */
+.compact-header {
+    height: 30vh;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.compact-header h1 {
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+}
+
+.page-header .video-background,
+.compact-header .video-background {
     position: absolute;
     top: 0;
     left: 0;
@@ -357,18 +378,21 @@ a:hover {
     z-index: 0;
 }
 
-.page-header .container {
+.page-header .container,
+.compact-header .container {
     position: relative;
     z-index: 1;
 }
 
-.page-header .video-background video {
+.page-header .video-background video,
+.compact-header .video-background video {
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
-.page-header .overlay {
+.page-header .overlay,
+.compact-header .overlay {
     background-color: rgba(12, 53, 35, 0.5);
 }
 
