@@ -36,7 +36,10 @@
      <!-- Navigation -->
    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Mulligan Masters</a>
+            <a class="navbar-brand" href="index.html">
+                <img src="assets/Mulligan Masters recreate Golf Logo_011425.png" alt="Mulligan Masters Logo" style="height: 40px; width: auto; margin-right: 10px;">
+                Mulligan Masters
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -96,6 +99,7 @@
                 <!-- Events Tabs -->
                 <div class="events-tabs mb-5" data-aos="fade-up">
                     <div class="events-tab active" data-target="upcoming-events">Upcoming Events</div>
+                    <div class="events-tab" data-target="booked-rounds">Booked Rounds</div>
                     <div class="events-tab" data-target="past-events">Past Events</div>
                 </div>
                 
@@ -137,6 +141,45 @@
                             </div>
                         </div> -->
                         
+                    </div>
+                </div>
+                
+                <!-- Booked Rounds -->
+                <div id="booked-rounds" class="events-content" style="display: none;">
+                    <div class="container">
+                        <div class="row mb-4">
+                            <div class="col-12 text-center">
+                                <p class="lead">View our upcoming booked rounds. Join us at these courses for regular play with the Mulligan Masters group.</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table table-striped" id="booked-rounds-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Tee Time</th>
+                                                <th>Course</th>
+                                                <th>Status</th>
+                                                <th>Groups</th>
+                                                <th>Booking Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="6" class="text-center">Loading booked rounds...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-12 text-center">
+                                <p><small>Data is pulled from our <a href="https://docs.google.com/spreadsheets/d/1TToyNaNsboS7RTARk06NF08s673M0Jx2NORqvwy0qQI/edit?gid=828020761#gid=828020761" target="_blank">scheduling spreadsheet</a>.</small></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -273,5 +316,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/sheets.js"></script>
 </body>
 </html>

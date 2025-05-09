@@ -4,9 +4,23 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize AOS
+    AOS.init({
+        once: true,
+        disable: 'mobile'
+    });
+    
     // Gallery filtering functionality
     const filterButtons = document.querySelectorAll('.gallery-filter-btn');
     const galleryItems = document.querySelectorAll('.gallery-item');
+    
+    // Ensure all gallery items are visible by default and remove AOS attributes
+    galleryItems.forEach(item => {
+        item.style.display = 'block';
+        // Remove AOS attributes to prevent animation issues
+        item.removeAttribute('data-aos');
+        item.removeAttribute('data-aos-delay');
+    });
     
     if (filterButtons.length > 0 && galleryItems.length > 0) {
         filterButtons.forEach(button => {
@@ -51,6 +65,21 @@ document.addEventListener('DOMContentLoaded', function() {
             if (imgSrc) {
                 lightboxContent.innerHTML = `<img src="${imgSrc}" alt="Gallery Image">`;
                 currentIndex = index;
+                
+                // Make sure the image is fully loaded before showing
+                const img = lightboxContent.querySelector('img');
+                if (img) {
+                    img.onload = function() {
+                        // Ensure image fits within viewport
+                        const maxWidth = window.innerWidth * 0.9;
+                        const maxHeight = window.innerHeight * 0.8;
+                        
+                        if (img.naturalWidth > maxWidth || img.naturalHeight > maxHeight) {
+                            img.style.maxWidth = maxWidth + 'px';
+                            img.style.maxHeight = maxHeight + 'px';
+                        }
+                    };
+                }
             }
         }
         
@@ -93,26 +122,60 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Lazy loading for gallery images
-    const lazyImages = document.querySelectorAll('.gallery-image[data-src]');
+    // Enhanced lazy loading for gallery images with caching
+    const lazyImages = document.querySelectorAll('.gallery-image');
     
     if (lazyImages.length > 0) {
-        // Create intersection observer
+        // Create intersection observer with options
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '100px', // load images 100px before they enter viewport
+            threshold: 0.1 // trigger when 10% of the element is visible
+        };
+        
         const imageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const img = entry.target;
-                    const src = img.getAttribute('data-src');
+                    const bgImage = img.style.backgroundImage;
                     
-                    if (src) {
-                        img.style.backgroundImage = `url(${src})`;
-                        img.removeAttribute('data-src');
+                    // Only process if not already loaded
+                    if (bgImage && !img.classList.contains('loaded')) {
+                        // Extract the URL from the background-image style
+                        const urlMatch = bgImage.match(/url\(['"]?([^'"]+)['"]?\)/);
+                        if (urlMatch && urlMatch[1]) {
+                            const imageUrl = urlMatch[1];
+                            
+                            // Create a new image to preload
+                            const preloadImg = new Image();
+                            
+                            // Set up load event
+                            preloadImg.onload = function() {
+                                // Apply the loaded image with cache control
+                                img.style.backgroundImage = `url(${imageUrl})`;
+                                img.classList.add('loaded');
+                                
+                                // Add cache control headers via fetch API
+                                fetch(imageUrl, {
+                                    method: 'GET',
+                                    headers: {
+                                        'Cache-Control': 'max-age=31536000' // Cache for 1 year
+                                    },
+                                    mode: 'no-cors' // Avoid CORS issues with static files
+                                }).catch(() => {
+                                    // Silently fail - image is already loaded anyway
+                                });
+                            };
+                            
+                            // Start loading the image
+                            preloadImg.src = imageUrl;
+                        }
                     }
                     
                     observer.unobserve(img);
                 }
             });
-        });
+        }, observerOptions);
         
         // Observe each image
         lazyImages.forEach(img => {
@@ -127,18 +190,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (galleryContainer && galleryContainer.classList.contains('masonry')) {
             const items = galleryContainer.querySelectorAll('.gallery-item');
-            const columns = getComputedStyle(galleryContainer).gridTemplateColumns.split(' ').length;
             
-            // Set heights for items to create masonry effect
-            items.forEach((item, index) => {
-                // This is a simple pattern, you might want to randomize this more
-                if (index % 3 === 0) {
-                    item.style.gridRowEnd = 'span 1';
-                } else if (index % 3 === 1) {
-                    item.style.gridRowEnd = 'span 2';
-                } else {
-                    item.style.gridRowEnd = 'span 1';
-                }
+            // Set all items to span 1 to ensure square layout and make sure they're visible
+            items.forEach((item) => {
+                item.style.gridRowEnd = 'span 1';
+                item.style.display = 'block'; // Ensure all items are visible
             });
         }
     }

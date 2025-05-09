@@ -238,53 +238,55 @@
             box-shadow: var(--shadow-md);
         }
         
-        /* Countdown Timer Styling */
+        /* Countdown Timer Styling - Redesigned to be more compact and less obtrusive */
         .event-countdown-container {
-            background-color: var(--accent-light);
+            background-color: transparent;
             border-radius: var(--radius-md);
-            padding: 1.5rem;
-            box-shadow: var(--shadow-sm);
+            padding: 0.75rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
         }
         
         #event-countdown {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 0.5rem;
             flex-wrap: nowrap;
+            align-items: center;
         }
         
         .countdown-item {
-            background-color: var(--bg-light);
-            border-radius: var(--radius-sm);
-            padding: 1rem;
-            width: 100px;
-            height: 100px;
+            background-color: transparent;
+            padding: 0;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            flex-direction: row;
+            align-items: baseline;
             text-align: center;
-            box-shadow: var(--shadow-sm);
-            border: 2px solid var(--accent-color);
+            border: none;
         }
         
         .countdown-value {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 1.25rem;
+            font-weight: 600;
             color: var(--primary-dark);
             line-height: 1;
-            margin-bottom: 0.5rem;
-            width: 100%;
+            margin-right: 0.25rem;
             text-align: center;
         }
         
         .countdown-label {
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            width: 100%;
-            text-align: center;
+            text-transform: lowercase;
+            letter-spacing: 0;
+            text-align: left;
+        }
+        
+        .countdown-separator {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin: 0 0.1rem;
         }
         
         /* Countdown animation */
@@ -372,35 +374,34 @@
                 font-size: 1.5rem;
             }
             
-            /* Countdown timer mobile adjustments */
+            /* Countdown timer mobile adjustments for the new inline design */
             #event-countdown {
-                flex-wrap: wrap;
-                gap: 0.75rem !important;
+                flex-wrap: nowrap;
+                gap: 0.25rem !important;
                 justify-content: center;
             }
             
             .countdown-item {
-                width: calc(50% - 0.75rem);
-                height: auto;
-                aspect-ratio: 1/1;
-                padding: 0.5rem;
-                min-width: unset;
-                max-width: unset;
-                flex: 0 0 calc(50% - 0.75rem);
                 display: flex;
-                flex-direction: column;
-                justify-content: center;
+                flex-direction: row;
+                align-items: baseline;
+                padding: 0;
+                width: auto;
+                height: auto;
             }
             
             .countdown-value {
-                font-size: 1.75rem;
-                margin-bottom: 0.25rem;
-                display: block;
+                font-size: 1.1rem;
+                margin-right: 0.1rem;
             }
             
             .countdown-label {
-                font-size: 0.7rem;
-                display: block;
+                font-size: 0.65rem;
+            }
+            
+            .countdown-separator {
+                font-size: 1.1rem;
+                margin: 0 0.1rem;
             }
             
             /* Adjust two-column layouts to stack on mobile */
@@ -449,17 +450,27 @@
             
             /* Further adjustments for very small screens */
             #event-countdown {
-                gap: 0.5rem !important;
+                gap: 0.2rem !important;
             }
             
             .countdown-item {
-                width: calc(50% - 0.5rem);
-                flex: 0 0 calc(50% - 0.5rem);
-                padding: 0.5rem;
+                width: auto;
+                flex: none;
+                padding: 0;
             }
             
             .countdown-value {
-                font-size: 1.5rem;
+                font-size: 1rem;
+                margin-right: 0.1rem;
+            }
+            
+            .countdown-label {
+                font-size: 0.6rem;
+            }
+            
+            .countdown-separator {
+                font-size: 1rem;
+                margin: 0;
             }
         }
     </style>
@@ -468,7 +479,10 @@
      <!-- Navigation -->
    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Mulligan Masters</a>
+            <a class="navbar-brand" href="index.html">
+                <img src="assets/Mulligan Masters recreate Golf Logo_011425.png" alt="Mulligan Masters Logo" style="height: 40px; width: auto; margin-right: 10px;">
+                Mulligan Masters
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -554,27 +568,32 @@
                 </div>
             </div>
             
-            <!-- Countdown Timer -->
-            <div class="event-countdown-container mt-4 mb-4">
-                <h4 class="text-center mb-3"><i class="fas fa-hourglass-half me-2"></i>Event Countdown</h4>
-                <div id="event-countdown" class="d-flex justify-content-center">
-                    <div class="countdown-item">
-                        <div id="countdown-days" class="countdown-value">--</div>
-                        <div class="countdown-label">Days</div>
+            <!-- Countdown Timer - Redesigned to be more subtle -->
+            <div class="text-center mt-4 mb-4">
+                <small class="text-muted d-flex align-items-center justify-content-center">
+                    <i class="fas fa-hourglass-half me-2"></i>Event in 
+                    <div id="event-countdown" class="d-flex ms-2">
+                        <div class="countdown-item">
+                            <span id="countdown-days" class="countdown-value">--</span>
+                            <span class="countdown-label">d</span>
+                        </div>
+                        <span class="countdown-separator">:</span>
+                        <div class="countdown-item">
+                            <span id="countdown-hours" class="countdown-value">--</span>
+                            <span class="countdown-label">h</span>
+                        </div>
+                        <span class="countdown-separator">:</span>
+                        <div class="countdown-item">
+                            <span id="countdown-minutes" class="countdown-value">--</span>
+                            <span class="countdown-label">m</span>
+                        </div>
+                        <span class="countdown-separator">:</span>
+                        <div class="countdown-item">
+                            <span id="countdown-seconds" class="countdown-value">--</span>
+                            <span class="countdown-label">s</span>
+                        </div>
                     </div>
-                    <div class="countdown-item">
-                        <div id="countdown-hours" class="countdown-value">--</div>
-                        <div class="countdown-label">Hours</div>
-                    </div>
-                    <div class="countdown-item">
-                        <div id="countdown-minutes" class="countdown-value">--</div>
-                        <div class="countdown-label">Minutes</div>
-                    </div>
-                    <div class="countdown-item">
-                        <div id="countdown-seconds" class="countdown-value">--</div>
-                        <div class="countdown-label">Seconds</div>
-                    </div>
-                </div>
+                </small>
             </div>
             
             <!-- Groups Filled Indicator -->
