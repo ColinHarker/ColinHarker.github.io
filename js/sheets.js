@@ -115,11 +115,6 @@ function displayBookedRounds(data) {
             dateCell.textContent = row[0] || '';
             tr.appendChild(dateCell);
             
-            // TEE TIME
-            const timeCell = document.createElement('td');
-            timeCell.textContent = row[1] || '';
-            tr.appendChild(timeCell);
-            
             // COURSE
             const courseCell = document.createElement('td');
             courseCell.textContent = row[2] || '';
@@ -140,11 +135,6 @@ function displayBookedRounds(data) {
             const groupsCell = document.createElement('td');
             groupsCell.textContent = row[5] || '';
             tr.appendChild(groupsCell);
-            
-            // BOOKING NAME
-            const nameCell = document.createElement('td');
-            nameCell.textContent = row[6] || '';
-            tr.appendChild(nameCell);
             
             tableBody.appendChild(tr);
         });
