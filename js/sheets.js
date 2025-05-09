@@ -138,7 +138,7 @@ function displayBookedRounds(data) {
             
             // GROUPS
             const groupsCell = document.createElement('td');
-            groupsCell.textContent = row[4] || '';
+            groupsCell.textContent = row[5] || '';
             tr.appendChild(groupsCell);
             
             // BOOKING NAME
