@@ -135,6 +135,11 @@ function displayBookedRounds(data) {
             const groupsCell = document.createElement('td');
             groupsCell.textContent = row[5] || '';
             tr.appendChild(groupsCell);
+
+             // GROUPS
+            const openSpots = document.createElement('td');
+            openSpots.textContent = row[6] || '';
+            tr.appendChild(openSpots);
             
             tableBody.appendChild(tr);
         });
