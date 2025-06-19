@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('booked-rounds-table')) {
         fetchBookedRounds();
     }
+    
+    // Only run this code on the golf-for-good-scramble-event page
+    if (document.getElementById('tournament-registrations-table')) {
+        fetchTournamentRegistrations();
+    }
 });
 
 /**
@@ -16,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function fetchBookedRounds() {
     const spreadsheetId = '1TToyNaNsboS7RTARk06NF08s673M0Jx2NORqvwy0qQI';
     const sheetName = 'Tee Schedule'; // Assuming this is the sheet name
-    const range = 'A7:G50'; // Adjust range as needed to capture all relevant data
+    const range = 'A7:G200'; // Expanded range to capture more data
     
     // Construct the URL for the Google Sheets API
     // This uses the sheets.googleapis.com/v4/spreadsheets endpoint
@@ -144,6 +149,153 @@ function displayBookedRounds(data) {
             tableBody.appendChild(tr);
         });
     }
+}
+
+/**
+ * Fetches tournament registration data from Google Sheets
+ */
+function fetchTournamentRegistrations() {
+    const spreadsheetId = '1TToyNaNsboS7RTARk06NF08s673M0Jx2NORqvwy0qQI';
+    const sheetName = 'Tournament'; // Tournament sheet name
+    const range = 'D7:E50'; // Registered Golfers (column D) and Payment Status (column E)
+    
+    // Construct the URL for the Google Sheets API
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}!${range}?key=AIzaSyDfVHVyqAJhZseDLZlM_SCklEmew0FDOTU`;
+    
+    // Show loading message
+    const tableBody = document.querySelector('#tournament-registrations-table tbody');
+    tableBody.innerHTML = '<tr><td colspan="2" class="text-center">Loading tournament registrations...</td></tr>';
+    
+    // Fetch data from Google Sheets
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            displayTournamentRegistrations(data.values);
+        })
+        .catch(error => {
+            console.error('Error fetching tournament data:', error);
+            tableBody.innerHTML = `<tr><td colspan="2" class="text-center text-danger">Error loading registration data. Please try again later.</td></tr>`;
+            
+            // Fallback: Display sample data for demonstration
+            displaySampleTournamentData();
+        });
+}
+
+/**
+ * Displays tournament registration data in the table
+ * @param {Array} data - The data from Google Sheets
+ */
+function displayTournamentRegistrations(data) {
+    const tableBody = document.querySelector('#tournament-registrations-table tbody');
+    
+    // Clear the table
+    tableBody.innerHTML = '';
+    
+    // Check if we have data
+    if (!data || data.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="2" class="text-center">No registrations available.</td></tr>';
+        return;
+    }
+    
+    // Filter to only include rows with golfer names (non-empty first column)
+    const registrations = data.filter(row => {
+        return row[0] && row[0].trim() !== '' && row[0].trim() !== 'Registered Golfers';
+    });
+    
+    // Display the data
+    if (registrations.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="2" class="text-center">No registrations available.</td></tr>';
+    } else {
+        registrations.forEach(row => {
+            const tr = document.createElement('tr');
+            
+            // Golfer Name
+            const nameCell = document.createElement('td');
+            nameCell.textContent = row[0] || '';
+            tr.appendChild(nameCell);
+            
+            // Payment Status
+            const statusCell = document.createElement('td');
+            const status = row[1] || '';
+            statusCell.textContent = status;
+            
+            // Add styling based on payment status
+            if (status.toLowerCase() === 'paid') {
+                statusCell.classList.add('text-success', 'fw-bold');
+                statusCell.innerHTML = '<i class="fas fa-check-circle me-1"></i>' + status;
+            } else if (status.toLowerCase() === 'unpaid') {
+                statusCell.classList.add('text-danger', 'fw-bold');
+                statusCell.innerHTML = '<i class="fas fa-exclamation-circle me-1"></i>' + status;
+            } else {
+                statusCell.classList.add('text-muted');
+            }
+            
+            tr.appendChild(statusCell);
+            tableBody.appendChild(tr);
+        });
+    }
+}
+
+/**
+ * Displays sample tournament data as a fallback
+ */
+function displaySampleTournamentData() {
+    const tableBody = document.querySelector('#tournament-registrations-table tbody');
+    
+    // Sample tournament registration data
+    const sampleData = [
+        ['Clint', 'Paid'],
+        ['Mike', 'Unpaid'],
+        ['Daniel', 'Unpaid'],
+        ['Patrick', 'Unpaid'],
+        ['Harold', 'Paid'],
+        ['Pat', 'Paid'],
+        ['Jason', 'Paid']
+    ];
+    
+    // Clear the table
+    tableBody.innerHTML = '';
+    
+    // Add a note that this is sample data
+    const noteRow = document.createElement('tr');
+    const noteCell = document.createElement('td');
+    noteCell.colSpan = 2;
+    noteCell.classList.add('text-center', 'text-warning', 'small');
+    noteCell.innerHTML = '<strong>Note:</strong> Showing sample data. Could not connect to live data source.';
+    noteRow.appendChild(noteCell);
+    tableBody.appendChild(noteRow);
+    
+    // Add the sample data
+    sampleData.forEach(row => {
+        const tr = document.createElement('tr');
+        
+        // Golfer Name
+        const nameCell = document.createElement('td');
+        nameCell.textContent = row[0];
+        tr.appendChild(nameCell);
+        
+        // Payment Status
+        const statusCell = document.createElement('td');
+        const status = row[1];
+        statusCell.textContent = status;
+        
+        // Add styling based on payment status
+        if (status.toLowerCase() === 'paid') {
+            statusCell.classList.add('text-success', 'fw-bold');
+            statusCell.innerHTML = '<i class="fas fa-check-circle me-1"></i>' + status;
+        } else if (status.toLowerCase() === 'unpaid') {
+            statusCell.classList.add('text-danger', 'fw-bold');
+            statusCell.innerHTML = '<i class="fas fa-exclamation-circle me-1"></i>' + status;
+        }
+        
+        tr.appendChild(statusCell);
+        tableBody.appendChild(tr);
+    });
 }
 
 /**
