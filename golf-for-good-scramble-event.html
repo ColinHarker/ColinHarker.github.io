@@ -563,7 +563,7 @@
                     </div>
                     <div class="col-md-6">
                         <p><strong><i class="fas fa-clock me-2"></i>Start Time:</strong> 11:00 AM</p>
-                        <p><strong><i class="fas fa-users me-2"></i>Max Groups:</strong> 15 (space is limited—secure your spot early!)</p>
+                        <p><strong><i class="fas fa-users me-2"></i>Max Groups:</strong> 10 (space is limited—secure your spot early!)</p>
                     </div>
                 </div>
             </div>
@@ -604,35 +604,27 @@
                         <span id="groups-filled-text">0/15 Groups</span>
                     </div>
                 </div>
-                <p class="text-center mt-2"><small id="spots-remaining-text">15 team spots remaining</small></p>
+                <p class="text-center mt-2"><small id="spots-remaining-text">10 team spots remaining</small></p>
             </div>
 
             <!-- Tournament Registrations -->
             <div class="event-section mt-4" data-aos="fade-up">
                 <h3 class="d-flex align-items-center justify-content-between">
-                    <span><i class="fas fa-list-ul me-2"></i>Current Registrations</span>
+                    <span><i class="fas fa-users me-2"></i>Tournament Groups</span>
                     <button class="btn btn-outline-success btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#registrationsCollapse" aria-expanded="false" aria-controls="registrationsCollapse">
                         <i class="fas fa-chevron-down" id="registrations-chevron"></i>
                         <span class="ms-1">Show</span>
                     </button>
                 </h3>
-                <p class="mb-3">See who's already signed up for the tournament and their payment status.</p>
+                <p class="mb-3">View the tournament groups organized by tee time, including player names and payment status.</p>
                 
                 <div class="collapse" id="registrationsCollapse">
-                    <div class="table-responsive">
-                        <table class="table table-striped" id="tournament-registrations-table">
-                            <thead>
-                                <tr>
-                                    <th>Golfer</th>
-                                    <th>Payment Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="2" class="text-center">Loading registrations...</td>
-                                </tr>
-                            </tbody>
+                    <div id="tournament-registrations-container">
+                        <!-- This will be populated by JavaScript with a hidden table element for compatibility -->
+                        <table id="tournament-registrations-table" style="display: none;">
+                            <tbody></tbody>
                         </table>
+                        <div class="text-center">Loading tournament groups...</div>
                     </div>
                     
                     <div class="text-center mt-3">
@@ -737,16 +729,16 @@
                         <!-- Registration Form Section -->
                         <div id="signup" class="event-section mt-5" data-aos="fade-up">
                             <div class="text-center mb-4">
-                                <span class="badge bg-primary px-3 py-2 mb-2">Registration Open</span>
+                                <span class="badge bg-primary px-3 py-2 mb-2">Registration Closed</span>
                                 <h3 class="text-center mb-3"><i class="fas fa-clipboard-check me-2"></i>Tournament Registration</h3>
-                                <p class="lead">Complete the form below to secure your spot in the tournament</p>
+                                <!-- <p class="lead">Complete the form below to secure your spot in the tournament</p> -->
                             </div>
                             
                             <div class="key-info mb-4">
-                                <p class="mb-0 text-center"><i class="fas fa-info-circle me-2"></i><strong>Note:</strong> Space is limited to 15 groups. Early registration is recommended to guarantee your participation.</p>
+                                <p class="mb-0 text-center"><i class="fas fa-info-circle me-2"></i><strong>Note:</strong> Space is limited to 10 groups. Early registration is recommended to guarantee your participation.</p>
                             </div>
                             
-                            <div class="google-form-container">
+                            <!-- <div class="google-form-container">
                                 <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScLYWS9mLn4VeYrgZ1-RY__shuPTAGq_y64M589X8GjjlyAIQ/viewform?embedded=true" 
                                     width="100%" 
                                     height="1200" 
@@ -755,11 +747,11 @@
                                     marginwidth="0">
                                     Loading Google Form...
                                 </iframe>
-                            </div>
+                            </div> -->
                             
-                            <div class="text-center mt-4">
+                            <!-- <div class="text-center mt-4">
                                 <p class="text-muted"><small>Having trouble with the form? <a href="https://forms.gle/9Y3LumQf6A5ReYq39" target="_blank">Open it in a new window</a></small></p>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -805,8 +797,8 @@
         
         // Current number of groups filled (this would typically come from a database)
         // For demonstration purposes, we're setting it to 8 groups
-        const groupsFilled = 9;
-        const maxGroups = 15;
+        const groupsFilled = 10;
+        const maxGroups = 10;
         
         // Update the countdown timer
         function updateCountdown() {
