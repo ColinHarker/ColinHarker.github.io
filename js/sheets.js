@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function fetchBookedRounds() {
     const spreadsheetId = '1TToyNaNsboS7RTARk06NF08s673M0Jx2NORqvwy0qQI';
-    const sheetName = 'Tee Schedule'; // Assuming this is the sheet name
+    const sheetName = '2026 Tee Schedule';
     const range = 'A7:G200'; // Expanded range to capture more data
     
     // Construct the URL for the Google Sheets API
@@ -46,9 +46,6 @@ function fetchBookedRounds() {
         .catch(error => {
             console.error('Error fetching data:', error);
             tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error loading data. Please try again later.</td></tr>`;
-            
-            // Fallback: Display sample data for demonstration
-            displaySampleData();
         });
 }
 
@@ -86,7 +83,11 @@ function displayBookedRounds(data) {
             // Format like "Sat, Apr 5" or "Sun, Apr 27"
             const month = dateParts[1];
             const day = parseInt(dateParts[2]);
-            const year = new Date().getFullYear(); // Assume current year if not specified
+            // If month is before current month, assume it's next year (for 2026 schedule)
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const parsedMonth = new Date(`${month} 1, 2000`).getMonth();
+            const year = (parsedMonth < currentMonth) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
             dateObj = new Date(`${month} ${day}, ${year}`);
         } else {
             // Try to parse as is
