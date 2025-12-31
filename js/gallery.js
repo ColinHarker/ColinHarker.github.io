@@ -25,14 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const lightboxClose = document.querySelector('.lightbox-close');
 
     // Fetch photos from Netlify function
-    async function fetchPhotos(tag = 'all') {
+    async function fetchPhotos(category = 'all') {
         try {
             // Show loading state
             if (galleryContainer) {
                 galleryContainer.innerHTML = '<div class="gallery-loading">Loading photos...</div>';
             }
 
-            const response = await fetch(`/.netlify/functions/get-gallery-photos?tag=${tag}`);
+            const response = await fetch(`/.netlify/functions/get-gallery-photos?category=${category}`);
 
             if (!response.ok) {
                 throw new Error('Failed to fetch photos');

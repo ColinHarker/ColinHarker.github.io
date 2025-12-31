@@ -7,9 +7,9 @@ cloudinary.config({
 });
 
 exports.handler = async (event) => {
-  const tag = event.queryStringParameters?.tag || 'all';
+  const category = event.queryStringParameters?.category || 'all';
 
-  // CORS headers for local development
+  // CORS headers
   const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
@@ -21,22 +21,23 @@ exports.handler = async (event) => {
     return { statusCode: 200, headers, body: '' };
   }
 
-  try {
-    let result;
+  // Map categories to folder prefixes
+  const folderMap = {
+    'all': 'mulligan-masters/',
+    'northwood': 'mulligan-masters/northwood/',
+    'social': 'mulligan-masters/social/',
+    'poppy': 'mulligan-masters/poppy/'
+  };
 
-    if (tag === 'all') {
-      // Fetch all gallery photos (tagged with mulligan-gallery)
-      result = await cloudinary.api.resources_by_tag('mulligan-gallery', {
-        max_results: 500,
-        resource_type: 'image'
-      });
-    } else {
-      // Fetch by specific category tag (northwood, social, poppy)
-      result = await cloudinary.api.resources_by_tag(tag, {
-        max_results: 500,
-        resource_type: 'image'
-      });
-    }
+  const prefix = folderMap[category] || 'mulligan-masters/';
+
+  try {
+    const result = await cloudinary.api.resources({
+      type: 'upload',
+      prefix: prefix,
+      max_results: 500,
+      resource_type: 'image'
+    });
 
     // Transform response to include optimized URLs
     const photos = result.resources.map(resource => ({
