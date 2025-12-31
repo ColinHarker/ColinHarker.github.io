@@ -21,20 +21,13 @@ exports.handler = async (event) => {
     return { statusCode: 200, headers, body: '' };
   }
 
-  // Map categories to folder prefixes
-  const folderMap = {
-    'all': 'home/mulligan-masters/',
-    'northwood': 'home/mulligan-masters/northwood/',
-    'social': 'home/mulligan-masters/social/',
-    'poppy': 'home/mulligan-masters/poppy/'
-  };
-
-  const prefix = folderMap[category] || 'home/mulligan-masters/';
+  // Map categories to tags
+  // 'all' fetches everything tagged with 'mulligan-gallery'
+  // Other categories fetch by their specific tag
+  const tag = category === 'all' ? 'mulligan-gallery' : category;
 
   try {
-    const result = await cloudinary.api.resources({
-      type: 'upload',
-      prefix: prefix,
+    const result = await cloudinary.api.resources_by_tag(tag, {
       max_results: 500,
       resource_type: 'image'
     });
