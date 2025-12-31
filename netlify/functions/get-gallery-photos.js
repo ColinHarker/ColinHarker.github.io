@@ -23,13 +23,13 @@ exports.handler = async (event) => {
 
   // Map categories to folder prefixes
   const folderMap = {
-    'all': 'mulligan-masters/',
-    'northwood': 'mulligan-masters/northwood/',
-    'social': 'mulligan-masters/social/',
-    'poppy': 'mulligan-masters/poppy/'
+    'all': 'home/mulligan-masters/',
+    'northwood': 'home/mulligan-masters/northwood/',
+    'social': 'home/mulligan-masters/social/',
+    'poppy': 'home/mulligan-masters/poppy/'
   };
 
-  const prefix = folderMap[category] || 'mulligan-masters/';
+  const prefix = folderMap[category] || 'home/mulligan-masters/';
 
   try {
     const result = await cloudinary.api.resources({
