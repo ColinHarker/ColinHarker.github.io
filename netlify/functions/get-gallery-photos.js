@@ -21,19 +21,35 @@ exports.handler = async (event) => {
     return { statusCode: 200, headers, body: '' };
   }
 
-  // Map categories to tags
-  // 'all' fetches everything tagged with 'mulligan-gallery'
-  // Other categories fetch by their specific tag
-  const tag = category === 'all' ? 'mulligan-gallery' : category;
-
   try {
-    const result = await cloudinary.api.resources_by_tag(tag, {
-      max_results: 500,
-      resource_type: 'image'
-    });
+    let allResources = [];
+
+    if (category === 'all') {
+      // Fetch from all three category tags and combine
+      const categories = ['northwood', 'social', 'poppy'];
+
+      for (const cat of categories) {
+        try {
+          const result = await cloudinary.api.resources_by_tag(cat, {
+            max_results: 200,
+            resource_type: 'image'
+          });
+          allResources = allResources.concat(result.resources);
+        } catch (e) {
+          // Tag might not exist yet, continue
+        }
+      }
+    } else {
+      // Fetch by specific category tag
+      const result = await cloudinary.api.resources_by_tag(category, {
+        max_results: 500,
+        resource_type: 'image'
+      });
+      allResources = result.resources;
+    }
 
     // Transform response to include optimized URLs
-    const photos = result.resources.map(resource => ({
+    const photos = allResources.map(resource => ({
       public_id: resource.public_id,
       // Thumbnail URL with auto-format and quality
       thumbnail: cloudinary.url(resource.public_id, {
