@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2nd Annual Golf for Good Scramble | Mulligan Masters</title>
+
+    <!-- Primary Meta Tags -->
+    <meta name="description" content="Join us for the 2nd Annual Golf for Good Scramble Tournament on August 22nd, 2026 at Baylands Golf Links in Palo Alto, CA. A fun-focused scramble supporting the Peninsula Humane Society & SPCA.">
+
+    <!-- Open Graph / Facebook / iOS Message Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://colinharker.github.io/golf-for-good-2026.html">
+    <meta property="og:title" content="2nd Annual Golf for Good Scramble Tournament | Mulligan Masters">
+    <meta property="og:description" content="Join us on August 22nd, 2026 for a day of golf, community, and giving back at Baylands Golf Links. Space limited to 10 teams!">
+    <meta property="og:image" content="https://colinharker.github.io/assets/images/golf-for-good-logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://colinharker.github.io/golf-for-good-2026.html">
+    <meta property="twitter:title" content="2nd Annual Golf for Good Scramble Tournament | Mulligan Masters">
+    <meta property="twitter:description" content="Join us on August 22nd, 2026 for a day of golf, community, and giving back at Baylands Golf Links. Space limited to 10 teams!">
+    <meta property="twitter:image" content="https://colinharker.github.io/assets/images/golf-for-good-logo.png">
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/Mulligan Masters recreate Golf Logo_011425.png" type="image/png">
+
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        /* Enhanced styling for a more professional look */
+        :root {
+            --accent-color: #d2aa45;
+            --accent-light: rgba(210, 170, 69, 0.15);
+            --accent-dark: #c09a3e;
+            --primary-dark: #0c3523;
+            --primary-light: #1a5a3d;
+            --text-light: #f8f9fa;
+            --text-dark: #343a40;
+            --text-muted: #6c757d;
+            --bg-light: #ffffff;
+            --bg-off-white: #f9f9f9;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.7;
+            background-color: var(--bg-off-white);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--primary-dark);
+        }
+
+        /* Enhanced header styling */
+        .event-detail-header {
+            background-image: url('assets/images/courses/baylands.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .event-detail-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(12, 53, 35, 0.8), rgba(12, 53, 35, 0.6));
+        }
+
+        .event-detail-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 2rem;
+            /* Removed background and box shadow */
+        }
+
+        .event-detail-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            font-weight: 800;
+        }
+
+        .event-detail-content .lead {
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        .event-detail-content .badge {
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .event-detail-content .btn-outline-dark {
+            color: white;
+            border-color: white;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .event-detail-content .btn-outline-dark:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main content styling */
+        main {
+            position: relative;
+            margin-top: -50px;
+        }
+
+        .event-section {
+            margin-bottom: 3rem;
+            padding: 2.5rem;
+            background-color: var(--bg-light);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            border-top: 5px solid var(--accent-color);
+        }
+
+        .event-section h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--accent-color);
+            font-size: 1.75rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .event-section h3 i {
+            color: var(--accent-color);
+            margin-right: 0.75rem;
+            font-size: 1.5rem;
+        }
+
+        /* Enhanced list styling */
+        .event-detail-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .event-detail-list li {
+            margin-bottom: 1.25rem;
+            padding-left: 2.5rem;
+            position: relative;
+        }
+
+        .event-detail-list li i {
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            color: var(--accent-color);
+            font-size: 1.25rem;
+        }
+
+        .event-detail-list li strong {
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        /* Enhanced key info box */
+        .key-info {
+            background-color: var(--accent-light);
+            border-left: 5px solid var(--accent-color);
+            padding: 1.75rem;
+            margin-bottom: 2.5rem;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .key-info p {
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .key-info strong {
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        /* Enhanced button styling */
+        .signup-btn {
+            background-color: var(--accent-color);
+            color: var(--text-dark);
+            font-weight: 700;
+            padding: 14px 36px;
+            border-radius: 50px;
+            border: none;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 4px 10px rgba(210, 170, 69, 0.3);
+        }
+
+        .signup-btn:hover {
+            background-color: var(--accent-dark);
+            color: var(--text-light);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(210, 170, 69, 0.4);
+        }
+
+        /* Section dividers */
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(to right, var(--accent-light), var(--accent-color), var(--accent-light));
+            margin: 3rem 0;
+            border-radius: 2px;
+        }
+
+        /* Google Form container */
+        .google-form-container {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Countdown Timer Styling - Redesigned to be more compact and less obtrusive */
+        .event-countdown-container {
+            background-color: transparent;
+            border-radius: var(--radius-md);
+            padding: 0.75rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        #event-countdown {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+
+        .countdown-item {
+            background-color: transparent;
+            padding: 0;
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            text-align: center;
+            border: none;
+        }
+
+        .countdown-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            line-height: 1;
+            margin-right: 0.25rem;
+            text-align: center;
+        }
+
+        .countdown-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: lowercase;
+            letter-spacing: 0;
+            text-align: left;
+        }
+
+        .countdown-separator {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin: 0 0.1rem;
+        }
+
+        /* Countdown animation */
+        @keyframes pulse-animation {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+                color: var(--accent-color);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse-animation {
+            animation: pulse-animation 0.5s ease-in-out;
+        }
+
+        /* Groups Filled Styling */
+        .groups-filled-container {
+            background-color: var(--bg-light);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .progress {
+            overflow: visible;
+        }
+
+        .progress-bar {
+            position: relative;
+            transition: width 1s ease;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .event-detail-header {
+                height: 100vh; /* Full height on mobile */
+                padding: 0 15px;
+            }
+
+            .event-detail-content {
+                padding: 1.5rem;
+                width: 100%;
+            }
+
+            .event-detail-content h1 {
+                font-size: 2.5rem;
+                line-height: 1.2;
+                margin-bottom: 0.75rem;
+            }
+
+            .event-detail-content .lead {
+                font-size: 1.25rem;
+            }
+
+            .event-detail-content .logo-container img {
+                max-width: 150px;
+            }
+
+            .event-detail-content .d-flex {
+                flex-direction: column;
+                gap: 10px !important;
+            }
+
+            .event-detail-content .btn {
+                width: 100%;
+                padding: 12px;
+            }
+
+            .event-section {
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .event-section h3 {
+                font-size: 1.5rem;
+            }
+
+            /* Countdown timer mobile adjustments for the new inline design */
+            #event-countdown {
+                flex-wrap: nowrap;
+                gap: 0.25rem !important;
+                justify-content: center;
+            }
+
+            .countdown-item {
+                display: flex;
+                flex-direction: row;
+                align-items: baseline;
+                padding: 0;
+                width: auto;
+                height: auto;
+            }
+
+            .countdown-value {
+                font-size: 1.1rem;
+                margin-right: 0.1rem;
+            }
+
+            .countdown-label {
+                font-size: 0.65rem;
+            }
+
+            .countdown-separator {
+                font-size: 1.1rem;
+                margin: 0 0.1rem;
+            }
+
+            /* Adjust two-column layouts to stack on mobile */
+            .row .col-md-6, .row .col-md-4, .row .col-md-8, .row .col-lg-6 {
+                margin-bottom: 1.5rem;
+            }
+
+            /* Center the purpose logo on mobile */
+            .purpose-logo {
+                margin-top: 1rem;
+            }
+
+            /* Adjust footer for mobile */
+            footer .col-md-4 {
+                text-align: center;
+                margin-bottom: 1.5rem;
+            }
+
+            footer .text-md-end {
+                text-align: center !important;
+            }
+
+            /* Ensure Google Form is responsive */
+            .google-form-container iframe {
+                height: 1500px; /* Taller on mobile to reduce scrolling within iframe */
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 576px) {
+            .event-detail-content h1 {
+                font-size: 2rem;
+            }
+
+            .event-detail-content .badge {
+                font-size: 0.8rem !important;
+            }
+
+            .event-section h3 {
+                font-size: 1.3rem;
+            }
+
+            .event-detail-list li {
+                padding-left: 2rem;
+            }
+
+            /* Further adjustments for very small screens */
+            #event-countdown {
+                gap: 0.2rem !important;
+            }
+
+            .countdown-item {
+                width: auto;
+                flex: none;
+                padding: 0;
+            }
+
+            .countdown-value {
+                font-size: 1rem;
+                margin-right: 0.1rem;
+            }
+
+            .countdown-label {
+                font-size: 0.6rem;
+            }
+
+            .countdown-separator {
+                font-size: 1rem;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+     <!-- Navigation -->
+   <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="assets/Mulligan Masters recreate Golf Logo_011425.png" alt="Mulligan Masters Logo" style="height: 40px; width: auto; margin-right: 10px;">
+                Mulligan Masters
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="roster.html">Roster</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="events.html">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="gallery.html">Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="hole-in-one.html">Hole in One</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="faqs.html">FAQs</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Enhanced Event Header -->
+    <header class="page-header event-detail-header">
+        <div class="container text-center event-detail-content">
+            <div class="mb-3">
+                <span class="badge bg-light text-dark px-3 py-2 mb-3" style="font-size: 1rem;">
+                    <i class="fas fa-calendar-alt me-2"></i>August 22nd, 2026
+                </span>
+            </div>
+            <div class="logo-container mb-4" data-aos="fade-up">
+                <img src="assets/images/golf-for-good-logo.png" alt="Golf for Good Logo" class="img-fluid" style="max-width: 200px; border-radius: 10px; box-shadow: var(--shadow-md);">
+            </div>
+            <h1 data-aos="fade-up">2nd Annual Golf for Good Scramble Tournament</h1>
+            <p class="lead" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-map-marker-alt me-2"></i>Hosted by Mulligan Masters of the Bay
+            </p>
+            <div class="d-flex justify-content-center gap-3 mt-4" data-aos="fade-up" data-aos-delay="200">
+                <a href="#signup" class="btn signup-btn">
+                    <i class="fas fa-golf-ball me-2"></i>Sign Up Now
+                </a>
+                <a href="#details" class="btn btn-outline-dark">
+                    <i class="fas fa-info-circle me-2"></i>Learn More
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto" data-aos="fade-up">
+                        <!-- Event Overview Section -->
+                        <div id="details" class="event-section">
+                            <p class="lead text-center mb-4">
+                                Join us for a day of golf, community, and giving back—all on a beautiful Bay Area course!
+                            </p>
+
+            <div class="key-info">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong><i class="fas fa-map-marker-alt me-2"></i>Location:</strong> Baylands Golf Links, Palo Alto, CA</p>
+                        <p><strong><i class="fas fa-calendar-day me-2"></i>Date:</strong> Saturday, August 22nd, 2026</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong><i class="fas fa-clock me-2"></i>Start Time:</strong> 2:00 PM Shotgun Start</p>
+                        <p><strong><i class="fas fa-users me-2"></i>Max Groups:</strong> 10 (space is limited—secure your spot early!)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Countdown Timer - Redesigned to be more subtle -->
+            <div class="text-center mt-4 mb-4">
+                <small class="text-muted d-flex align-items-center justify-content-center">
+                    <i class="fas fa-hourglass-half me-2"></i>Event in
+                    <div id="event-countdown" class="d-flex ms-2">
+                        <div class="countdown-item">
+                            <span id="countdown-days" class="countdown-value">--</span>
+                            <span class="countdown-label">d</span>
+                        </div>
+                        <span class="countdown-separator">:</span>
+                        <div class="countdown-item">
+                            <span id="countdown-hours" class="countdown-value">--</span>
+                            <span class="countdown-label">h</span>
+                        </div>
+                        <span class="countdown-separator">:</span>
+                        <div class="countdown-item">
+                            <span id="countdown-minutes" class="countdown-value">--</span>
+                            <span class="countdown-label">m</span>
+                        </div>
+                        <span class="countdown-separator">:</span>
+                        <div class="countdown-item">
+                            <span id="countdown-seconds" class="countdown-value">--</span>
+                            <span class="countdown-label">s</span>
+                        </div>
+                    </div>
+                </small>
+            </div>
+
+            <!-- Groups Filled Indicator -->
+            <div class="groups-filled-container mt-4 mb-4">
+                <h4 class="text-center mb-3"><i class="fas fa-users me-2"></i>Registration Status</h4>
+                <div class="progress" style="height: 30px; border-radius: 15px; background-color: rgba(0,0,0,0.1);">
+                    <div id="groups-filled-progress" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <span id="groups-filled-text">0/10 Groups</span>
+                    </div>
+                </div>
+                <p class="text-center mt-2"><small id="spots-remaining-text">10 team spots remaining</small></p>
+            </div>
+
+            <!-- Tournament Registrations -->
+            <!-- <div class="event-section mt-4" data-aos="fade-up">
+                <h3 class="d-flex align-items-center justify-content-between">
+                    <span><i class="fas fa-users me-2"></i>Tournament Groups</span>
+                    <button class="btn btn-outline-success btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#registrationsCollapse" aria-expanded="false" aria-controls="registrationsCollapse">
+                        <i class="fas fa-chevron-down" id="registrations-chevron"></i>
+                        <span class="ms-1">Show</span>
+                    </button>
+                </h3>
+                <p class="mb-3">View the tournament groups organized by tee time, including player names and payment status.</p>
+
+                <div class="collapse" id="registrationsCollapse">
+                    <div id="tournament-registrations-container"> -->
+                        <!-- This will be populated by JavaScript with a hidden table element for compatibility -->
+                        <!-- <table id="tournament-registrations-table" style="display: none;">
+                            <tbody></tbody>
+                        </table>
+                        <div class="text-center">Loading tournament groups...</div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <p><small class="text-muted">Data is pulled from our <a href="https://docs.google.com/spreadsheets/d/1TToyNaNsboS7RTARk06NF08s673M0Jx2NORqvwy0qQI/edit?gid=828020761#gid=828020761" target="_blank">tournament spreadsheet</a>.</small></p>
+                    </div>
+                </div>
+            </div> -->
+
+                            <h3><i class="fas fa-bullseye me-2"></i>Tournament Purpose</h3>
+                            <div class="row mb-4">
+                                <div class="col-md-8">
+                                    <ul class="event-detail-list">
+                                        <li><i class="fas fa-users"></i><strong>Connect</strong> with like-minded golf enthusiasts and Bay Area professionals.</li>
+                                        <li><i class="fas fa-heart"></i><strong>Support</strong> the local Peninsula Humane Society & SPCA and their mission to protect and care for animals in need.</li>
+                                        <li><i class="fas fa-golf-ball"></i><strong>Enjoy</strong> a non-competitive, fun-focused scramble with great people.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="section-divider"></div>
+
+                            <h3><i class="fas fa-calendar-alt me-2"></i>Key Dates & Details</h3>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <ul class="event-detail-list">
+                                        <li><i class="fas fa-money-bill"></i><strong>Deposit Due:</strong>
+                                            <ul>
+                                                <li>$25 deposit (refundable until August 3rd)</li>
+                                            </ul>
+                                        </li>
+                                        <li><i class="fas fa-calendar-check"></i><strong>Final Commitment & Full Payment Due:</strong> August 3rd, 2026</li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-6">
+                                    <ul class="event-detail-list">
+                                        <li><i class="fas fa-exclamation-circle"></i><strong>Refund Policy:</strong> No refunds after August 3rd</li>
+                                        <li><i class="fas fa-envelope"></i><strong>Communications:</strong> Email & WhatsApp for tournament updates</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="section-divider"></div>
+
+                            <h3><i class="fas fa-dollar-sign me-2"></i>Cost to Play</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="event-detail-list">
+                                        <li><i class="fas fa-user-check"></i><strong>$205 per golfer</strong></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="event-detail-list">
+                                        <li><i class="fas fa-list-check"></i><strong>Includes:</strong> Green fees, cart, range balls, tournament gift, swag, and donation.</li>
+                                        <li><i class="fab fa-venmo"></i><strong>Payment:</strong> Venmo @amitpthakkar (Last 4 digits of phone for confirmation: 6006)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="section-divider"></div>
+
+                            <h3><i class="fas fa-users me-2"></i>Team Sign-Ups</h3>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <p>You may sign up as a:</p>
+                                    <ul class="event-detail-list">
+                                        <li><i class="fas fa-user"></i><strong>Single</strong></li>
+                                        <li><i class="fas fa-user-friends"></i><strong>Twosome</strong></li>
+                                        <li><i class="fas fa-users"></i><strong>Threesome</strong></li>
+                                        <li><i class="fas fa-users"></i><strong>Foursome</strong></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <div class="key-info w-100 mb-0">
+                                        <p class="mb-0"><i class="fas fa-info-circle me-2"></i>If your group is incomplete, we'll help fill it with other awesome participants.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-divider"></div>
+
+                            <h3><i class="fas fa-clipboard-list me-2"></i>Golf For Good Scramble Rules</h3>
+
+                            <!-- Format & Rules of Play -->
+                            <div class="mb-4">
+                                <h4 class="text-primary mb-3">Format & Rules of Play</h4>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <ul class="event-detail-list">
+                                            <li><i class="fas fa-users"></i><strong>Scramble Style:</strong> All four players tee off, then select the best shot. Everyone hits from that spot. Repeat until holed.</li>
+                                            <li><i class="fas fa-golf-ball"></i><strong>Tee Assignments:</strong><br>
+                                                Men: Play from the white tees<br>
+                                                Women: Play from the gold tees</li>
+                                            <li><i class="fas fa-exclamation-circle"></i><strong>Minimum Tee Shots:</strong> Each player MUST contribute at least 2 tee shots during the round.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <ul class="event-detail-list">
+                                            <li><i class="fas fa-map-marker-alt"></i><strong>Ball Placement Rules:</strong><br>
+                                                Place your ball within 1 club length of the selected shot (no closer to the hole).<br>
+                                                Must stay in the same condition: fairway stays in fairway, rough stays in rough, bunkers... stay sandy.</li>
+                                            <li><i class="fas fa-clock"></i><strong>2-Putt Max / Bogey Max:</strong> Once your team has all putted twice or reached bogey, pick it up and move on. This keeps the round moving and everyone happy behind you.</li>
+                                            <li><i class="fas fa-redo"></i><strong>Mulligans:</strong> $10 per Mulligan with max of 4 per group - use them wisely</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Scoring Instructions -->
+                            <div class="mb-4">
+                                <h4 class="text-primary mb-3">Scoring Instructions</h4>
+                                <ul class="event-detail-list">
+                                    <li><i class="fas fa-clipboard"></i>One player from each team must keep the official score on a physical scorecard.</li>
+                                    <li><i class="fas fa-calculator"></i>After your round, subtract your team handicap strokes (we'll provide those ahead of time).</li>
+                                    <li><i class="fab fa-whatsapp"></i>Post your final net team score in the WhatsApp group so we can all admire</li>
+                                    <li><i class="fas fa-check-double"></i>Keep it clean, keep it honest, and double-check the math</li>
+                                </ul>
+                            </div>
+
+                            <!-- Handicaps & Scoring Fairness -->
+                            <div class="mb-4">
+                                <h4 class="text-primary mb-3">Handicaps & Scoring Fairness</h4>
+                                <ul class="event-detail-list">
+                                    <li><i class="fas fa-balance-scale"></i><strong>Handicap Adjustment:</strong> We're applying a team handicap adjustment to keep it fair. Teams with lower average handicaps may get strokes subtracted, and higher-handicap teams may get bonus strokes. Full details released before game day.</li>
+                                </ul>
+                            </div>
+
+                            <!-- Etiquette + Vibes -->
+                            <div class="mb-4">
+                                <h4 class="text-primary mb-3">Etiquette + Vibes</h4>
+                                <div class="key-info">
+                                    <h5><strong>Be Cool</strong></h5>
+                                    <p>No cheating. No foot wedges. No "I thought that was a gimme."</p>
+                                    <p>Tip your cart staff, don't forget sunscreen, and for the love of doggos,</p>
+                                    <p>Trash talk is allowed, encouraged even—just keep it friendly.</p>
+                                </div>
+                            </div>
+
+                            <!-- Grand Prize -->
+                            <div class="mb-4">
+                                <h4 class="text-primary mb-3">Grand Prize</h4>
+                                <div class="key-info" style="background-color: var(--accent-light); border-left: 5px solid var(--accent-color);">
+                                    <h5><strong>Winning Team = Big Swingers</strong></h5>
+                                    <p class="mb-0">The first-place team will each receive a <strong>$50 PGA Tour Superstore Gift Card!</strong> That's $200 of gear, balls, gadgets, or fresh drip for your next round. Swing big, win bigger.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Registration Form Section -->
+                        <div id="signup" class="event-section mt-5" data-aos="fade-up">
+                            <div class="text-center mb-4">
+                                <span class="badge bg-success px-3 py-2 mb-2">Registration Open</span>
+                                <h3 class="text-center mb-3"><i class="fas fa-clipboard-check me-2"></i>Tournament Registration</h3>
+                                <p class="lead">Complete the form below to secure your spot in the tournament</p>
+                            </div>
+
+                            <div class="key-info mb-4">
+                                <p class="mb-0 text-center"><i class="fas fa-info-circle me-2"></i><strong>Note:</strong> Space is limited to 10 groups. Early registration is recommended to guarantee your participation.</p>
+                            </div>
+
+                            <!-- Google Form - Update URL when new form is created -->
+                            <div class="google-form-container">
+                                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScLYWS9mLn4VeYrgZ1-RY__shuPTAGq_y64M589X8GjjlyAIQ/viewform?embedded=true"
+                                    width="100%"
+                                    height="1200"
+                                    frameborder="0"
+                                    marginheight="0"
+                                    marginwidth="0">
+                                    Loading Google Form...
+                                </iframe>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <p class="text-muted"><small>Having trouble with the form? <a href="https://forms.gle/9Y3LumQf6A5ReYq39" target="_blank">Open it in a new window</a></small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <h3>Mulligan Masters</h3>
+                    <p>Where passion for golf meets camaraderie</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <ul class="social-links">
+                        <li><a href="https://www.instagram.com/mulligansmasters/"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                    <p class="mt-2">
+                        <a href="mailto:mulliganmastersofthebay@gmail.com">mulliganmastersofthebay@gmail.com</a>
+                    </p>
+                </div>
+            </div>
+            <div class="section-divider my-3"></div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="mb-0">&copy; <span id="current-year"></span> Mulligan Masters. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/sheets.js"></script>
+
+    <script>
+        // Event date - August 22nd, 2026 at 2:00 PM Pacific Time
+        const eventDate = new Date('August 22, 2026 14:00:00 PDT').getTime();
+
+        // Current number of groups filled (this would typically come from a database)
+        const groupsFilled = 18;
+        const maxGroups = 18;
+
+        // Update the countdown timer
+        function updateCountdown() {
+            // Get current date and time
+            const now = new Date().getTime();
+
+            // Find the distance between now and the event date
+            const distance = eventDate - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Display the result
+            document.getElementById('countdown-days').textContent = days;
+            document.getElementById('countdown-hours').textContent = hours;
+            document.getElementById('countdown-minutes').textContent = minutes;
+            document.getElementById('countdown-seconds').textContent = seconds;
+
+            // If the countdown is finished, display a message
+            if (distance < 0) {
+                clearInterval(countdownTimer);
+                document.getElementById('countdown-days').textContent = '0';
+                document.getElementById('countdown-hours').textContent = '0';
+                document.getElementById('countdown-minutes').textContent = '0';
+                document.getElementById('countdown-seconds').textContent = '0';
+
+                // Optional: Add a message that the event has started/ended
+                const countdownContainer = document.querySelector('.event-countdown-container');
+                if (countdownContainer) {
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'alert alert-success mt-3 text-center';
+                    messageElement.textContent = 'The event has started!';
+                    countdownContainer.appendChild(messageElement);
+                }
+            }
+        }
+
+        // Update the groups filled display
+        function updateGroupsFilledDisplay() {
+            const percentage = (groupsFilled / maxGroups) * 100;
+            const progressBar = document.getElementById('groups-filled-progress');
+            const groupsText = document.getElementById('groups-filled-text');
+            const spotsText = document.getElementById('spots-remaining-text');
+
+            if (progressBar && groupsText && spotsText) {
+                progressBar.style.width = percentage + '%';
+                progressBar.setAttribute('aria-valuenow', percentage);
+                groupsText.textContent = groupsFilled + '/' + maxGroups + ' Groups';
+
+                const spotsRemaining = maxGroups - groupsFilled;
+                spotsText.textContent = spotsRemaining + ' team ' + (spotsRemaining === 1 ? 'spot' : 'spots') + ' remaining';
+
+                // Change color based on availability
+                if (percentage >= 80) {
+                    progressBar.classList.remove('bg-success');
+                    progressBar.classList.add('bg-danger');
+                } else if (percentage >= 50) {
+                    progressBar.classList.remove('bg-success');
+                    progressBar.classList.add('bg-warning');
+                }
+            }
+        }
+
+        // Call functions on page load
+        updateCountdown();
+        updateGroupsFilledDisplay();
+
+        // Update the countdown every second
+        const countdownTimer = setInterval(updateCountdown, 1000);
+
+        // Add animation to the countdown values
+        const countdownValues = document.querySelectorAll('.countdown-value');
+        countdownValues.forEach(value => {
+            value.addEventListener('change', function() {
+                value.classList.add('pulse-animation');
+                setTimeout(() => {
+                    value.classList.remove('pulse-animation');
+                }, 500);
+            });
+        });
+
+        // Handle collapse toggle for registrations section
+        const registrationsCollapse = document.getElementById('registrationsCollapse');
+        const registrationsChevron = document.getElementById('registrations-chevron');
+        const registrationsButton = registrationsCollapse.previousElementSibling.querySelector('button');
+
+        registrationsCollapse.addEventListener('show.bs.collapse', function () {
+            registrationsChevron.classList.remove('fa-chevron-down');
+            registrationsChevron.classList.add('fa-chevron-up');
+            registrationsButton.querySelector('span').textContent = 'Hide';
+        });
+
+        registrationsCollapse.addEventListener('hide.bs.collapse', function () {
+            registrationsChevron.classList.remove('fa-chevron-up');
+            registrationsChevron.classList.add('fa-chevron-down');
+            registrationsButton.querySelector('span').textContent = 'Show';
+        });
+    </script>
+
+    <!-- No custom form submission script needed for embedded Google Form -->
+</body>
+</html>
