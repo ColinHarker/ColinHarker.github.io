@@ -83,11 +83,8 @@ function displayBookedRounds(data) {
             // Format like "Sat, Apr 5" or "Sun, Apr 27"
             const month = dateParts[1];
             const day = parseInt(dateParts[2]);
-            // If month is before current month, assume it's next year (for 2026 schedule)
-            const currentDate = new Date();
-            const currentMonth = currentDate.getMonth();
-            const parsedMonth = new Date(`${month} 1, 2000`).getMonth();
-            const year = (parsedMonth < currentMonth) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
+            // Use 2026 to match the "2026 Tee Schedule" sheet
+            const year = 2026;
             dateObj = new Date(`${month} ${day}, ${year}`);
         } else {
             // Try to parse as is

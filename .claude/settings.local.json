@@ -3,7 +3,8 @@
     "allow": [
       "Bash(cat:*)",
       "Bash(gh pr list:*)",
-      "Bash(powershell -Command \"\n$content = Get-Content ''gallery.html'' -Raw\n# Match from __GALLERY_PLACEHOLDER__ to the closing </div> of gallery-container\n$pattern = ''__GALLERY_PLACEHOLDER__[\\\\s\\\\S]*?\\(?=\\\\s*</div>\\\\s*<div class=\"\"row mt-5\"\"\\)''\n$replacement = ''''\n$newContent = $content -replace $pattern, $replacement\nSet-Content ''gallery.html'' $newContent -NoNewline\n\")"
+      "Bash(powershell -Command \"\n$content = Get-Content ''gallery.html'' -Raw\n# Match from __GALLERY_PLACEHOLDER__ to the closing </div> of gallery-container\n$pattern = ''__GALLERY_PLACEHOLDER__[\\\\s\\\\S]*?\\(?=\\\\s*</div>\\\\s*<div class=\"\"row mt-5\"\"\\)''\n$replacement = ''''\n$newContent = $content -replace $pattern, $replacement\nSet-Content ''gallery.html'' $newContent -NoNewline\n\")",
+      "Bash(grep:*)"
     ]
   }
 }
