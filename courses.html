@@ -23,44 +23,34 @@
     <meta property="twitter:image" content="https://colinharker.github.io/assets/images/Northwood-Landscapes--WEB-5.jpeg">
     
     <!-- Favicon -->
-    <link rel="icon" href="assets/Mulligan Masters recreate Golf Logo_011425.png" type="image/png">
-    
+    <link rel="icon" href="assets/dog_logo_transparent.png" type="image/png">
+
     <!-- Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/editorial.css">
     <style>
         .course-section {
-            padding: 5rem 0;
+            padding: clamp(64px, 8vh, 96px) 0;
         }
-        
+
         .course-section:nth-child(even) {
-            background-color: var(--light-color);
+            background-color: var(--editorial-soft);
         }
-        
-        .course-card {
-            background-color: var(--white-color);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            margin-bottom: 30px;
-            transition: transform 0.3s ease;
-            height: 100%;
-        }
-        
-        .course-card:hover {
-            transform: translateY(-10px);
-        }
-        
+
         .course-image {
-            height: 200px;
+            height: 220px;
             background-size: cover;
             background-position: center;
             position: relative;
         }
-        
+
         .course-image::after {
             content: '';
             position: absolute;
@@ -68,91 +58,115 @@
             left: 0;
             width: 100%;
             height: 50%;
-            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            background: linear-gradient(to top, rgba(6,29,18,0.55), transparent);
         }
-        
+
         .course-info {
-            padding: 1.5rem;
+            padding: 24px;
         }
-        
+
         .course-name {
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+            color: var(--editorial-forest);
+            font-size: 22px;
+            margin-bottom: 6px;
         }
-        
+
         .course-location {
-            color: var(--gray-color);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--editorial-text-muted);
+            font-size: 12px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
         }
-        
+
         .course-location i {
-            margin-right: 5px;
+            margin-right: 6px;
+            color: var(--editorial-gold);
         }
-        
+
         .course-description {
-            margin-bottom: 1.5rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            line-height: 1.65;
+            color: var(--editorial-text);
+            margin-bottom: 18px;
         }
-        
+
         .course-link {
             display: inline-flex;
             align-items: center;
-            color: var(--primary-color);
+            color: var(--editorial-forest);
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
             font-weight: 600;
-            transition: all 0.3s ease;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            transition: color 300ms ease;
+            text-decoration: none;
+            border-bottom: 1px solid var(--editorial-rule);
+            padding-bottom: 4px;
         }
-        
+
         .course-link:hover {
-            color: var(--secondary-color);
+            color: var(--editorial-gold);
+            border-bottom-color: var(--editorial-gold);
         }
-        
+
         .course-link i {
             margin-right: 8px;
+            font-size: 11px;
         }
-        
-        .section-title {
+
+        body.editorial.airy .section-title {
             position: relative;
-            padding-bottom: 15px;
+            padding-bottom: 20px;
             margin-bottom: 30px;
+            font-family: 'Playfair Display', serif;
+            color: var(--editorial-forest);
         }
-        
-        .section-title::after {
+
+        body.editorial.airy .section-title::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 0;
             width: 50px;
-            height: 3px;
-            background-color: var(--secondary-color);
+            height: 1px;
+            background-color: var(--editorial-gold);
         }
-        
-        .section-title.text-center::after {
+
+        body.editorial.airy .section-title.text-center::after {
             left: 50%;
             transform: translateX(-50%);
         }
-        
+
         .bucket-list-badge {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            z-index: 1;
+            top: 14px;
+            right: 14px;
+            background-color: var(--editorial-gold);
+            color: var(--editorial-forest);
+            padding: 6px 12px;
+            border-radius: 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            font-weight: 700;
+            z-index: 2;
         }
     </style>
 </head>
-<body>
+<body class="editorial airy">
      <!-- Navigation -->
    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.html">
-                <img src="assets/Mulligan Masters recreate Golf Logo_011425.png" alt="Mulligan Masters Logo" style="height: 40px; width: auto; margin-right: 10px;">
+                <img src="assets/dog_logo_transparent.png" alt="Mulligan Masters Logo" style="height: 44px; width: auto; margin-right: 12px;">
                 Mulligan Masters
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -190,9 +204,11 @@
     </nav>
 
     <!-- Page Header -->
-    <header class="compact-header">
-        <div class="container text-center">
-            <h1 data-aos="fade-up">Our Golf Courses</h1>
+    <header class="compact-header--airy">
+        <div class="compact-header--airy__inner">
+            <span class="compact-header--airy__eyebrow">Courses We Play</span>
+            <h1 class="compact-header--airy__title">Bay Area Rotation</h1>
+            <p class="compact-header--airy__lede">From neighborhood favorites to bucket-list cathedrals along the Northern California coast.</p>
         </div>
     </header>
 
