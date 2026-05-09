@@ -1845,7 +1845,7 @@ body.editorial.airy .navbar-toggler-icon {
 .hero-airy__brand {
     position: relative;
     z-index: 2;
-    padding: 56px 0;
+    padding: 48px 24px 56px;
     background: #ffffff;
 }
 
@@ -3057,4 +3057,69 @@ body.editorial.airy .timeline-date {
     letter-spacing: 0.22em;
     text-transform: uppercase;
     font-weight: 600;
+}
+
+/* ============================================================
+   Mobile polish (phones)
+   ============================================================ */
+@media (max-width: 575.98px) {
+    /* Hero: tighter mascot, full-width CTAs */
+    body.editorial.airy .hero-airy__mascot {
+        width: 84px;
+    }
+    body.editorial.airy .hero-airy__lockup {
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    body.editorial.airy .hero-airy__pitch {
+        font-size: 16px;
+        margin-bottom: 24px;
+    }
+    body.editorial.airy .hero-airy__ctas {
+        gap: 10px;
+    }
+    body.editorial.airy .hero-airy__ctas .btn-airy {
+        flex: 1 1 100%;
+        justify-content: center;
+        padding: 14px 20px;
+    }
+
+    /* Section vertical spacing: trim the floor on small phones */
+    body.editorial.airy .editorial-section,
+    body.editorial.airy .mosaic-section,
+    body.editorial.airy .editorial-join,
+    body.editorial.airy .feature-strip {
+        padding-top: 56px;
+        padding-bottom: 56px;
+    }
+    body.editorial.airy .pillars {
+        padding-top: 48px;
+        padding-bottom: 56px;
+    }
+
+    /* Feature split (GFG card) — tighter padding so copy doesn't look stranded */
+    body.editorial.airy .feature-split__copy {
+        padding: 40px 24px 48px;
+    }
+    body.editorial.airy .feature-split__media {
+        min-height: 220px;
+    }
+
+    /* Mosaic intro spacing */
+    body.editorial.airy .mosaic-section__intro {
+        margin-bottom: 36px;
+    }
+    body.editorial.airy .mosaic-tabs {
+        margin-bottom: 32px;
+    }
+
+    /* Feature-strip intro tighter */
+    body.editorial.airy .feature-strip__intro {
+        margin-bottom: 48px;
+    }
+
+    /* Editorial split: closer image-to-copy gap */
+    body.editorial.airy .editorial-split {
+        gap: 32px;
+    }
 }
