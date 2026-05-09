@@ -154,12 +154,12 @@ function displayBookedRounds(data) {
  */
 function fetchTournamentRegistrations() {
     const spreadsheetId = '1TToyNaNsboS7RTARk06NF08s673M0Jx2NORqvwy0qQI';
-    const sheetName = 'Tournament'; // Tournament sheet name
-    const range = 'A7:E50'; // Registered Golfers (column D) and Payment Status (column E)
+    const sheetName = 'Tourny 8/22/26 BLD'; // Tournament sheet name
+    const range = 'A8:E50'; // Registered Golfers (column D) and Payment Status (column E), skip header row
     
     // Construct the URL for the Google Sheets API
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}!${range}?key=AIzaSyDfVHVyqAJhZseDLZlM_SCklEmew0FDOTU`;
-    
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(sheetName + '!' + range)}?key=AIzaSyDfVHVyqAJhZseDLZlM_SCklEmew0FDOTU`;
+
     // Show loading message
     const tableBody = document.querySelector('#tournament-registrations-table tbody');
     tableBody.innerHTML = '<tr><td colspan="2" class="text-center">Loading tournament registrations...</td></tr>';

@@ -101,21 +101,24 @@
        intact so sheets.js can still populate it.
        ------------------------------------------------------------ */
     function initGroupsCollapse() {
-        var toggle = document.querySelector('.groups-block__toggle');
-        var panel = document.querySelector('#groups-panel');
-        if (!toggle || !panel) return;
+        var toggles = document.querySelectorAll('.groups-block__toggle');
+        toggles.forEach(function (toggle) {
+            var panelId = toggle.getAttribute('aria-controls');
+            var panel = document.getElementById(panelId);
+            if (!panel) return;
 
-        // Start collapsed
-        panel.style.display = 'none';
+            // Start collapsed
+            panel.style.display = 'none';
 
-        toggle.addEventListener('click', function () {
-            var expanded = toggle.getAttribute('aria-expanded') === 'true';
-            toggle.setAttribute('aria-expanded', String(!expanded));
-            panel.style.display = expanded ? 'none' : 'block';
-            var label = toggle.querySelector('[data-toggle-label]');
-            if (label) {
-                label.textContent = expanded ? 'Show' : 'Hide';
-            }
+            toggle.addEventListener('click', function () {
+                var expanded = toggle.getAttribute('aria-expanded') === 'true';
+                toggle.setAttribute('aria-expanded', String(!expanded));
+                panel.style.display = expanded ? 'none' : 'block';
+                var label = toggle.querySelector('[data-toggle-label]');
+                if (label) {
+                    label.textContent = expanded ? 'Show' : 'Hide';
+                }
+            });
         });
     }
 
