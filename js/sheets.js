@@ -155,7 +155,7 @@ function displayBookedRounds(data) {
 function fetchTournamentRegistrations() {
     const spreadsheetId = '1TToyNaNsboS7RTARk06NF08s673M0Jx2NORqvwy0qQI';
     const sheetName = 'Tourny 8/22/26 BLD'; // Tournament sheet name
-    const range = 'A8:E50'; // Registered Golfers (column D) and Payment Status (column E), skip header row
+    const range = 'A8:E200'; // Wide enough to capture all groups (sheet may have multiple rows per group)
     
     // Construct the URL for the Google Sheets API
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(sheetName + '!' + range)}?key=AIzaSyDfVHVyqAJhZseDLZlM_SCklEmew0FDOTU`;
@@ -211,53 +211,36 @@ function displayTournamentRegistrations(data) {
  */
 function processRegistrationData(data) {
     const groups = [];
-    let currentGroup = null;
-    
+
     data.forEach(row => {
-        // Skip empty rows or header rows
-        if (!row || row.length < 4) return;
-        
+        if (!row) return;
+
         const teeTime = row[0] ? row[0].trim() : '';
         const groupNumber = row[1] ? row[1].trim() : '';
-        const playerNumber = row[2] ? row[2].trim() : '';
-        const golferName = row[3] ? row[3].trim() : '';
-        const paymentStatus = row[4] ? row[4].trim() : '';
-        
-        // Skip if no golfer name
-        if (!golferName) return;
-        
-        // If we have a tee time, start a new group
-        if (teeTime && teeTime !== '') {
-            currentGroup = {
-                teeTime: teeTime,
-                groupNumber: groupNumber,
-                players: []
-            };
-            groups.push(currentGroup);
-        }
-        
-        // Add player to current group if we have one
-        if (currentGroup && golferName) {
-            // Skip Ricardo as he's the odd one out in the last group
-            if (golferName.toLowerCase().includes('ricardo')) {
-                return;
-            }
-            
-            currentGroup.players.push({
-                name: golferName,
-                paymentStatus: paymentStatus,
-                playerNumber: playerNumber
-            });
-        }
+        const leadName = row[2] ? row[2].trim() : '';   // Column C: group lead
+        const playerCountRaw = row[4] ? String(row[4]).trim() : ''; // Column E: # players
+
+        // Skip empty rows / rows without a lead
+        if (!teeTime && !leadName) return;
+        if (!leadName) return;
+
+        const parsedCount = parseInt(playerCountRaw, 10);
+        const playerCount = isNaN(parsedCount) ? 0 : parsedCount;
+
+        groups.push({
+            teeTime: teeTime,
+            groupNumber: groupNumber,
+            leadName: leadName,
+            playerCount: playerCount
+        });
     });
-    
-    // Sort groups by tee time
+
     groups.sort((a, b) => {
         const timeA = convertTimeToMinutes(a.teeTime);
         const timeB = convertTimeToMinutes(b.teeTime);
         return timeA - timeB;
     });
-    
+
     return groups;
 }
 
@@ -292,68 +275,30 @@ function createGroupedRegistrationDisplay(container, groups) {
         container.innerHTML = '<div class="text-center">No registrations available.</div>';
         return;
     }
-    
-    let totalPlayers = 0;
-    
-    let html = '<div class="tournament-groups">';
-    
+
+    let html = '<div class="tournament-groups" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;">';
+
     groups.forEach(group => {
-        const playerCount = group.players.length;
-        totalPlayers += playerCount;
-        const isComplete = playerCount === 4;
-        
         html += `
-            <div class="group-card mb-4 p-3 border rounded ${isComplete ? 'border-success' : 'border-warning'}">
-                <div class="group-header d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0">
-                        <i class="fas fa-clock me-2 text-primary"></i>
-                        ${group.teeTime}
-                        ${group.groupNumber ? `- Group ${group.groupNumber}` : ''}
-                    </h5>
-                    <span class="badge ${isComplete ? 'bg-success' : 'bg-warning'} fs-6">
-                        ${playerCount}/4 players
-                    </span>
+            <div class="group-card" style="padding: 14px 16px; border: 1px solid var(--editorial-rule-soft); background: #fff; display: flex; flex-direction: column; gap: 4px;">
+                <div style="font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--editorial-text-muted);">
+                    <i class="fas fa-clock me-1"></i>${group.teeTime}${group.groupNumber ? ' · Grp ' + group.groupNumber : ''}
                 </div>
-                <div class="players-list">
-        `;
-        
-        // Display players in block format
-        html += `<div class="players-block d-flex flex-wrap gap-3">`;
-        group.players.forEach((player) => {
-            html += `
-                <span class="player-name fw-medium text-nowrap">${player.name}</span>
-            `;
-        });
-        html += `</div>`;
-        
-        html += `
+                <div style="font-family: 'Playfair Display', serif; font-size: 17px; color: var(--editorial-forest); line-height: 1.2;">
+                    ${group.leadName}
                 </div>
             </div>
         `;
     });
-    
+
     html += '</div>';
-    
-    // Add summary information
+
     html += `
-        <div class="registration-summary mt-4 p-3 bg-light rounded">
-            <div class="row text-center">
-                <div class="col-md-4">
-                    <h6 class="text-primary mb-1">Total Groups</h6>
-                    <span class="fs-4 fw-bold">${groups.length}</span>
-                </div>
-                <div class="col-md-4">
-                    <h6 class="text-success mb-1">Registered Players</h6>
-                    <span class="fs-4 fw-bold">${totalPlayers}</span>
-                </div>
-                <div class="col-md-4">
-                    <h6 class="text-warning mb-1">Open Spots</h6>
-                    <span class="fs-4 fw-bold">${(groups.length * 4) - totalPlayers}</span>
-                </div>
-            </div>
+        <div class="text-center" style="margin-top: 24px; font-family: 'Inter', sans-serif; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--editorial-text-muted);">
+            ${groups.length} ${groups.length === 1 ? 'Group' : 'Groups'} Registered
         </div>
     `;
-    
+
     container.innerHTML = html;
 }
 

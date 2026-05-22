@@ -129,7 +129,7 @@
         var root = document.getElementById('event-countdown');
         if (!root) return;
 
-        var eventDate = new Date('August 22, 2026 14:00:00 PDT').getTime();
+        var eventDate = new Date('August 22, 2026 09:00:00 PDT').getTime();
         var dEl = document.getElementById('countdown-days');
         var hEl = document.getElementById('countdown-hours');
         var mEl = document.getElementById('countdown-minutes');
